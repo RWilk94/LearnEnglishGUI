@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="rwilk.learnenglish.controller.sentence.SentenceTableController"
+  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+  prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+
+  <HBox>
+    <TextField fx:id="textFieldSearch" promptText="Search sentence here..." HBox.hgrow="ALWAYS">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </TextField>
+
+    <Button fx:id="buttonSearch" mnemonicParsing="false" text="Search">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
+  </HBox>
+
+  <TableView fx:id="tableSentences" VBox.vgrow="ALWAYS" onMouseClicked="#tableViewOnMouseClicked">
+    <columns>
+      <TableColumn fx:id="columnId" minWidth="20.0" prefWidth="-1.0" text="Id">
+        <cellValueFactory>
+          <PropertyValueFactory property="id"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnSentenceEn" minWidth="20.0" prefWidth="-1.0" text="En Sentence">
+        <cellValueFactory>
+          <PropertyValueFactory property="enSentence"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnSentencePl" minWidth="20.0" prefWidth="-1.0" text="Pl Sentence">
+        <cellValueFactory>
+          <PropertyValueFactory property="plSentence"/>
+        </cellValueFactory>
+      </TableColumn>
+
+      <TableColumn fx:id="columnWord" minWidth="20.0" prefWidth="-1.0" text="Word">
+        <cellValueFactory>
+          <PropertyValueFactory property="word"/>
+        </cellValueFactory>
+      </TableColumn>
+    </columns>
+
+    <VBox.margin>
+      <Insets bottom="5.0" left="5.0" right="5.0"/>
+    </VBox.margin>
+  </TableView>
+
+</VBox>

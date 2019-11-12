@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.SplitPane?>
+<VBox prefHeight="700" prefWidth="500" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+  AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="rwilk.learnenglish.controller.word.WordFormController">
+
+  <SplitPane dividerPositions="0.5" prefHeight="700" prefWidth="500" VBox.vgrow="ALWAYS">
+    <VBox>
+
+      <HBox BorderPane.alignment="TOP_CENTER">
+        <TextField fx:id="textFieldExtractWord" promptText="Paste word here..." BorderPane.alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+        <Button fx:id="buttonExtract" mnemonicParsing="false" onMouseClicked="#buttonExtractOnMouseClicked" text="Extract"
+          BorderPane.alignment="TOP_RIGHT">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+      </HBox>
+
+      <HBox>
+        <TextArea fx:id="textAreaEn" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </TextArea>
+
+        <TextArea fx:id="textAreaPl" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </TextArea>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="Id:">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <TextField fx:id="textFieldId" editable="false" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="EN Word:" style="-fx-font-weight: bold;">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <TextField fx:id="textFieldEnWord" HBox.hgrow="ALWAYS"  style="-fx-font-weight: bold;">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="PL Word:">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <TextField fx:id="textFieldPlWord" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="Part of Speech">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <ComboBox fx:id="comboBoxPartOfSpeech" minWidth="100" prefWidth="150.0">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </ComboBox>
+
+        <Label text="Level">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <ComboBox fx:id="comboBoxLevel" minWidth="100" prefWidth="150.0">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </ComboBox>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="EN Sentence:">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <TextField fx:id="textFieldEnSentence" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="PL Sentence:">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <TextField fx:id="textFieldPlSentence" HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+      </HBox>
+
+      <HBox>
+        <Label minWidth="100" text="Course:">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <ComboBox fx:id="comboBoxCourse" minWidth="100" onAction="#comboBoxCourseOnAction" prefWidth="150.0">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </ComboBox>
+
+        <Label text="Lesson:">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
+          </HBox.margin>
+        </Label>
+        <ComboBox fx:id="comboBoxLesson" minWidth="100" prefWidth="150.0">
+          <HBox.margin>
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </ComboBox>
+      </HBox>
+
+      <HBox alignment="BOTTOM_RIGHT">
+        <Button mnemonicParsing="false" onAction="#buttonRefreshOnAction" text="Refresh">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#buttonClearOnAction" text="Clear">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonDeleteOnAction" text="Delete">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonEditOnAction" text="Edit">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonAddOnAction" text="Add">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <VBox.margin>
+          <Insets bottom="10.0"/>
+        </VBox.margin>
+      </HBox>
+
+      <Separator prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+
+      <fx:include source="sentence_form.fxml"/>
+    </VBox>
+    <VBox>
+      <fx:include source="sentence_scrapper.fxml"/>
+    </VBox>
+  </SplitPane>
+
+</VBox>

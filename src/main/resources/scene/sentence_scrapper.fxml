@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="rwilk.learnenglish.controller.scrapper.SentenceScrapperController"
+  prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+
+  <HBox>
+      <RadioButton fx:id="radioButtonDiki" mnemonicParsing="false" onAction="#radioButtonDikiOnAction" text="Diki">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="9.0" />
+        </HBox.margin>
+      </RadioButton>
+      <RadioButton fx:id="radioButtonWiktionary" mnemonicParsing="false" onAction="#radioButtonWiktionaryOnAction" text="Wiktionary">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="9.0" />
+        </HBox.margin>
+      </RadioButton>
+      <RadioButton fx:id="radioButtonTatoeba" mnemonicParsing="false" onAction="#radioButtonTatoebaOnAction" text="Tatoeba">
+        <HBox.margin>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="9.0" />
+        </HBox.margin>
+      </RadioButton>
+  </HBox>
+
+  <HBox>
+    <Button fx:id="buttonTranslate" mnemonicParsing="false" onMouseClicked="#buttonTranslateOnMouseClicked" text="Translate"
+      BorderPane.alignment="TOP_RIGHT">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
+    <CheckBox fx:id="checkBoxTranslate" mnemonicParsing="false" onAction="#checkBoxTranslateOnAction" selected="true" text="Translate on click">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
+      </HBox.margin>
+    </CheckBox>
+    <Button fx:id="buttonClear" mnemonicParsing="false" onMouseClicked="#buttonClearOnMouseClicked" text="Clear"
+      BorderPane.alignment="TOP_RIGHT">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
+    <CheckBox fx:id="checkBoxReplace" mnemonicParsing="false" onAction="#checkBoxReplaceOnAction" selected="true" text="Replace dialog">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
+      </HBox.margin>
+    </CheckBox>
+    <CheckBox fx:id="checkBoxWholeWord" mnemonicParsing="false" onAction="#checkBoxWholeWordOnAction" selected="true" text="Whole word">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
+      </HBox.margin>
+    </CheckBox>
+  </HBox>
+  <HBox>
+    <TextField HBox.hgrow="ALWAYS" fx:id="textFieldWordToTranslate">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </HBox.margin>
+    </TextField>
+    <RadioButton fx:id="radioButtonEnToPl" mnemonicParsing="false" onAction="#radioButtonEnToPlOnAction" text="EN to PL">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
+      </HBox.margin>
+    </RadioButton>
+    <RadioButton fx:id="radioButtonPlToEn" mnemonicParsing="false" onAction="#radioButtonPlToEnOnAction" text="PL to EN">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
+      </HBox.margin>
+    </RadioButton>
+    <RadioButton fx:id="radioButtonEnToUn" mnemonicParsing="false" onAction="#radioButtonEnToUnOnAction" text="EN to UN">
+      <HBox.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
+      </HBox.margin>
+    </RadioButton>
+  </HBox>
+
+  <ListView fx:id="listViewTranslateWord" onMouseClicked="#listViewTranslateWordOnMouseClicked" prefHeight="300.0" prefWidth="232.0" VBox.vgrow="ALWAYS">
+    <VBox.margin>
+      <Insets bottom="2.0" />
+    </VBox.margin>
+  </ListView>
+  <TextField fx:id="textFieldFilterSentences" HBox.hgrow="ALWAYS" BorderPane.alignment="TOP_RIGHT" promptText="Filter sentences here...">
+    <VBox.margin>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+    </VBox.margin>
+  </TextField>
+  <ListView fx:id="listViewTranslateSentence" onMouseClicked="#listViewTranslateSentenceOnMouseClicked" prefHeight="300.0" prefWidth="232.0" VBox.vgrow="ALWAYS">
+    <VBox.margin>
+      <Insets top="2.0" />
+    </VBox.margin>
+  </ListView>
+
+</VBox>
