@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -45,6 +46,7 @@ public class WordFormController implements Initializable {
   public ComboBox comboBoxLesson;
   public TextArea textAreaEn;
   public TextArea textAreaPl;
+  public CheckBox checkBoxFilterTable;
   @Autowired
   private CourseRepository courseRepository;
   @Autowired
@@ -68,7 +70,12 @@ public class WordFormController implements Initializable {
     initializeCourseComboBox();
 
     textFieldEnWord.textProperty().addListener(
-        (observable, oldValue, newValue) -> sentenceScrapperController.textFieldWordToTranslate.setText(newValue));
+        (observable, oldValue, newValue) -> {
+          sentenceScrapperController.textFieldWordToTranslate.setText(newValue);
+          if (checkBoxFilterTable.isSelected()) {
+            wordsTableController.textFieldSearch.setText(newValue);
+          }
+        });
   }
 
   public void buttonExtractOnMouseClicked(MouseEvent mouseEvent) {

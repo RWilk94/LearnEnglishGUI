@@ -68,14 +68,18 @@ public class WordsTableController implements Initializable {
     textFieldSearch.textProperty().addListener(new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        tableWords.setItems(
-            FXCollections.observableArrayList(
-                words.stream().filter(word -> word.toString().toLowerCase().contains(newValue.toLowerCase())).collect(Collectors.toList())
-            )
-        );
+        filterTable(newValue);
       }
     });
 
+  }
+
+  private void filterTable(String value) {
+    tableWords.setItems(
+        FXCollections.observableArrayList(
+            words.stream().filter(word -> word.toString().toLowerCase().contains(value.toLowerCase())).collect(Collectors.toList())
+        )
+    );
   }
 
   public void comboBoxFilterCourseOnAction(ActionEvent event) {
@@ -84,6 +88,7 @@ public class WordsTableController implements Initializable {
       initLessonComboBox(selectedCourse);
       words = wordRepository.findAllByLesson_Course(selectedCourse);
       tableWords.setItems(FXCollections.observableArrayList(words));
+      filterTable(textFieldSearch.getText());
     }
   }
 
@@ -92,6 +97,7 @@ public class WordsTableController implements Initializable {
       Lesson selectedLesson = (Lesson) comboBoxFilterLesson.getSelectionModel().getSelectedItem();
       words = wordRepository.findAllByLesson(selectedLesson);
       tableWords.setItems(FXCollections.observableArrayList(words));
+      filterTable(textFieldSearch.getText());
     }
   }
 
@@ -106,6 +112,9 @@ public class WordsTableController implements Initializable {
   public void fillInTableView() {
     this.words = wordRepository.findAll();
     tableWords.setItems(FXCollections.observableArrayList(words));
+    comboBoxFilterCourseOnAction(null);
+    comboBoxFilterLessonOnAction(null);
+    filterTable(textFieldSearch.getText());
   }
 
   public void tableViewOnMouseClicked(MouseEvent mouseEvent) {
@@ -131,7 +140,7 @@ public class WordsTableController implements Initializable {
     }
   }
 
-  private void initCourseComboBox() {
+  public void initCourseComboBox() {
     List<Course> courses = courseRepository.findAll();
     comboBoxFilterCourse.setItems(FXCollections.observableArrayList(courses));
   }
