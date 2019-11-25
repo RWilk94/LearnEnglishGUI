@@ -12,17 +12,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import rwilk.learnenglish.controller.scrapper.MemriseScrapper;
 import rwilk.learnenglish.controller.scrapper.SentenceScrapperController;
 import rwilk.learnenglish.controller.sentence.SentenceFormController;
+import rwilk.learnenglish.model.MemriseWord;
 import rwilk.learnenglish.model.entity.Course;
 import rwilk.learnenglish.model.entity.Lesson;
 import rwilk.learnenglish.model.entity.Word;
@@ -47,6 +52,9 @@ public class WordFormController implements Initializable {
   public TextArea textAreaEn;
   public TextArea textAreaPl;
   public CheckBox checkBoxFilterTable;
+  public TextField textFieldPartOfSpeech;
+  public Button buttonMemrise;
+  public ListView listViewWords;
   @Autowired
   private CourseRepository courseRepository;
   @Autowired
@@ -59,6 +67,8 @@ public class WordFormController implements Initializable {
   private SentenceScrapperController sentenceScrapperController;
   @Autowired
   private SentenceFormController sentenceFormController;
+  @Autowired
+  private MemriseScrapper memriseScrapper;
   private List<String> partOfSpeechList;
   private Course selectedCourse;
   private Lesson selectedLesson;
@@ -95,10 +105,13 @@ public class WordFormController implements Initializable {
       plLines.forEach(text -> stringBuilderPl.append(text).append("\n"));
       textAreaPl.setText(stringBuilderPl.toString());
 
-      sentenceScrapperController.setWordToTranslate(textFieldEnWord.getText());
-      sentenceFormController.buttonClearOnAction(null);
-      sentenceScrapperController.radioButtonEnToPl.selectedProperty().setValue(true);
-      sentenceScrapperController.getTatoebaScrapper().setLanguageEnToPl();
+      if (sentenceScrapperController.checkBoxTranslate.isSelected()) {
+        sentenceScrapperController.setWordToTranslate(textFieldEnWord.getText());
+        sentenceFormController.buttonClearOnAction(null);
+        sentenceScrapperController.radioButtonEnToPl.selectedProperty().setValue(true);
+        sentenceScrapperController.getTatoebaScrapper().setLanguageEnToPl();
+      }
+
     }
   }
 
@@ -138,7 +151,8 @@ public class WordFormController implements Initializable {
     if (!textFieldId.getText().isEmpty()
         && !textFieldEnWord.getText().isEmpty()
         && !textFieldPlWord.getText().isEmpty()
-        && !comboBoxPartOfSpeech.getSelectionModel().isEmpty()
+        // && !comboBoxPartOfSpeech.getSelectionModel().isEmpty()
+        && !textFieldPartOfSpeech.getText().isEmpty()
         && !comboBoxLevel.getSelectionModel().isEmpty()
         && ((!textFieldEnSentence.getText().isEmpty() && !textFieldPlSentence.getText().isEmpty()) ||
         (textFieldEnSentence.getText().isEmpty() && textFieldPlSentence.getText().isEmpty()))
@@ -147,7 +161,8 @@ public class WordFormController implements Initializable {
       wordOptional.ifPresent(word -> {
         word.setEnWord(textFieldEnWord.getText().trim());
         word.setPlWord(textFieldPlWord.getText().trim());
-        word.setPartOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString());
+        // word.setPartOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString());
+        word.setPartOfSpeech(textFieldPartOfSpeech.getText().trim());
         word.setLevel((Integer) comboBoxLevel.getSelectionModel().getSelectedItem());
         word.setEnSentence(textFieldEnSentence.getText().trim());
         word.setPlSentence(textFieldPlSentence.getText().trim());
@@ -162,7 +177,8 @@ public class WordFormController implements Initializable {
   public void buttonAddOnAction(ActionEvent event) {
     if (!textFieldEnWord.getText().isEmpty()
         && !textFieldPlWord.getText().isEmpty()
-        && !comboBoxPartOfSpeech.getSelectionModel().isEmpty()
+        // && !comboBoxPartOfSpeech.getSelectionModel().isEmpty()
+        && !textFieldPartOfSpeech.getText().isEmpty()
         && !comboBoxLevel.getSelectionModel().isEmpty()
         && ((!textFieldEnSentence.getText().isEmpty() && !textFieldPlSentence.getText().isEmpty()) ||
         (textFieldEnSentence.getText().isEmpty() && textFieldPlSentence.getText().isEmpty()))
@@ -170,7 +186,8 @@ public class WordFormController implements Initializable {
       Word word = Word.builder()
           .enWord(textFieldEnWord.getText().trim())
           .plWord(textFieldPlWord.getText().trim())
-          .partOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString())
+          // .partOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString())
+          .partOfSpeech(textFieldPartOfSpeech.getText().trim())
           .level((Integer) comboBoxLevel.getSelectionModel().getSelectedItem())
           .enSentence(textFieldEnSentence.getText().trim())
           .plSentence(textFieldPlSentence.getText().trim())
@@ -188,7 +205,7 @@ public class WordFormController implements Initializable {
     textFieldId.setText(word.getId().toString());
     textFieldEnWord.setText(word.getEnWord());
     textFieldPlWord.setText(word.getPlWord());
-    comboBoxPartOfSpeech.getSelectionModel().select(word.getPartOfSpeech());
+    comboBoxPartOfSpeech.getSelectionModel().select(word.getPartOfSpeech().toLowerCase());
     comboBoxLevel.getSelectionModel().select(word.getLevel());
     textFieldEnSentence.setText(word.getEnSentence());
     textFieldPlSentence.setText(word.getPlSentence());
@@ -205,6 +222,44 @@ public class WordFormController implements Initializable {
     textFieldPlWord.setText(selectedItem);
   }
 
+  public void buttonMemriseOnMouseClicked(MouseEvent mouseEvent) {
+    memriseScrapper.webScrap(textFieldExtractWord.getText());
+
+    memriseScrapper.getEnWords().forEach(word -> textAreaEn.setText(textAreaEn.getText() + word + "\n"));
+    memriseScrapper.getPlWords().forEach(word -> textAreaPl.setText(textAreaPl.getText() + word + "\n"));
+
+    List<MemriseWord> memriseWords = new ArrayList<>();
+    for (int i = 0; i < memriseScrapper.getEnWords().size(); i++) {
+      memriseWords.add(MemriseWord.builder()
+          .enWord(memriseScrapper.getEnWords().get(i))
+          .plWord( memriseScrapper.getPlWords().get(i))
+          .build());
+    }
+    listViewWords.setItems(FXCollections.observableArrayList(memriseWords));
+  }
+
+  public void listViewWordsOnMouseClicked(MouseEvent mouseEvent) {
+    MemriseWord memriseWord = (MemriseWord) listViewWords.getSelectionModel().getSelectedItem();
+    if (memriseWord != null) {
+      textFieldEnWord.setText(memriseWord.getEnWord().trim());
+      textFieldPlWord.setText(memriseWord.getPlWord().trim());
+    }
+  }
+
+  public void buttonRemoveItemOnAction(ActionEvent event) {
+    List<MemriseWord> memriseWords = (List<MemriseWord>) listViewWords.getItems();
+    MemriseWord memriseWord = (MemriseWord) listViewWords.getSelectionModel().getSelectedItem();
+    memriseWords.remove(memriseWord);
+    listViewWords.setItems(FXCollections.observableArrayList(memriseWords));
+
+    StringBuilder stringBuilderEn = new StringBuilder();
+    memriseWords.forEach(text -> stringBuilderEn.append(text.getEnWord()).append("\n"));
+    textAreaEn.setText(stringBuilderEn.toString());
+    StringBuilder stringBuilderPl = new StringBuilder();
+    memriseWords.forEach(text -> stringBuilderPl.append(text.getPlWord()).append("\n"));
+    textAreaPl.setText(stringBuilderPl.toString());
+  }
+
   private void clearForm() {
     textFieldId.clear();
     textFieldEnWord.clear();
@@ -216,14 +271,25 @@ public class WordFormController implements Initializable {
   private void initializePartOfSpeechComboBox() {
     partOfSpeechList = new ArrayList<>();
     partOfSpeechList.add("");
-    partOfSpeechList.add("Noun (Rzeczownik)");
-    partOfSpeechList.add("Adjective (Przymiotnik)");
-    partOfSpeechList.add("Verb (Czasownik)");
-    partOfSpeechList.add("Adverb (Przysłówek)");
-    partOfSpeechList.add("Other (Inny)");
-    partOfSpeechList.add("Sentence (Zdanie)");
+    partOfSpeechList.add("noun (rzeczownik)");
+    partOfSpeechList.add("adjective (przymiotnik)");
+    partOfSpeechList.add("verb (czasownik)");
+    partOfSpeechList.add("adverb (przysłówek)");
+    partOfSpeechList.add("other (inny)");
+    partOfSpeechList.add("sentence (zdanie)");
+    partOfSpeechList.add("phrasal verb (czasownik frazowy)");
 
     comboBoxPartOfSpeech.setItems(FXCollections.observableArrayList(partOfSpeechList));
+
+    comboBoxPartOfSpeech.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+      @Override
+      public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        if (newValue != null && !newValue.toString().isEmpty()) {
+          textFieldPartOfSpeech
+              .setText(newValue.toString().substring(newValue.toString().indexOf("(") + 1, newValue.toString().indexOf(")")));
+        }
+      }
+    });
   }
 
   private void initializeLevelComboBox() {
