@@ -21,6 +21,9 @@ public class MemriseScrapper {
 
   public void webScrap(String link) {
     try {
+      plWords = new ArrayList<>();
+      enWords = new ArrayList<>();
+
       Document document = Jsoup.connect(link).timeout(6000).get();
       Elements elements = document.select("div.central-column").select("div.text-text");
 

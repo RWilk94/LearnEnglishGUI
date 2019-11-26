@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -69,6 +70,18 @@ public class WordsTableController implements Initializable {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         filterTable(newValue);
+      }
+    });
+
+    tableWords.setRowFactory(row -> new TableRow<Word>() {
+      @Override
+      protected void updateItem(Word item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item != null && item.getLesson() != null && item.getLesson().getCourse() != null && item.getLesson().getCourse().toString().contains("Memrise")) {
+          this.setStyle("-fx-background-color: lightgreen");
+        } else {
+          this.setStyle("");
+        }
       }
     });
 

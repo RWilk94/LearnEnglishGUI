@@ -23,6 +23,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import rwilk.learnenglish.controller.scrapper.MemriseScrapper;
 import rwilk.learnenglish.controller.scrapper.SentenceScrapperController;
@@ -55,6 +58,9 @@ public class WordFormController implements Initializable {
   public TextField textFieldPartOfSpeech;
   public Button buttonMemrise;
   public ListView listViewWords;
+  public ComboBox comboBoxCourse2;
+  public ComboBox comboBoxLesson2;
+  public Button buttonLowerPL;
   @Autowired
   private CourseRepository courseRepository;
   @Autowired
@@ -86,6 +92,37 @@ public class WordFormController implements Initializable {
             wordsTableController.textFieldSearch.setText(newValue);
           }
         });
+  }
+
+  public void initializeShortcut() {
+    KeyCombination keyCombination = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+    Runnable runnable = ()-> {
+      System.out.println("Ctrl + L");
+      buttonToLowerEnOnAction(null);
+      buttonToLowerPlOnAction(null);
+    };
+    buttonMemrise.getScene().getAccelerators().put(keyCombination, runnable);
+
+    keyCombination = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+    runnable = ()-> {
+      System.out.println("Ctrl + E");
+      buttonEditOnAction(null);
+    };
+    buttonMemrise.getScene().getAccelerators().put(keyCombination, runnable);
+
+    keyCombination = new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN);
+    runnable = ()-> {
+      System.out.println("Ctrl + A");
+      buttonAddOnAction(null);
+    };
+    buttonMemrise.getScene().getAccelerators().put(keyCombination, runnable);
+
+    keyCombination = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
+    runnable = ()-> {
+      System.out.println("Ctrl + R");
+      buttonRemoveItemOnAction(null);
+    };
+    buttonMemrise.getScene().getAccelerators().put(keyCombination, runnable);
   }
 
   public void buttonExtractOnMouseClicked(MouseEvent mouseEvent) {
@@ -148,6 +185,13 @@ public class WordFormController implements Initializable {
   }
 
   public void buttonEditOnAction(ActionEvent event) {
+    Lesson lesson;
+    if (!comboBoxLesson2.getSelectionModel().isEmpty()) {
+      lesson = (Lesson) comboBoxLesson2.getSelectionModel().getSelectedItem();
+    } else {
+      lesson = (Lesson) comboBoxLesson.getSelectionModel().getSelectedItem();
+    }
+
     if (!textFieldId.getText().isEmpty()
         && !textFieldEnWord.getText().isEmpty()
         && !textFieldPlWord.getText().isEmpty()
@@ -156,7 +200,8 @@ public class WordFormController implements Initializable {
         && !comboBoxLevel.getSelectionModel().isEmpty()
         && ((!textFieldEnSentence.getText().isEmpty() && !textFieldPlSentence.getText().isEmpty()) ||
         (textFieldEnSentence.getText().isEmpty() && textFieldPlSentence.getText().isEmpty()))
-        && !comboBoxLesson.getSelectionModel().isEmpty()) {
+        && lesson != null) {
+      // && !comboBoxLesson.getSelectionModel().isEmpty()) {
       Optional<Word> wordOptional = wordRepository.findById(Long.valueOf(textFieldId.getText()));
       wordOptional.ifPresent(word -> {
         word.setEnWord(textFieldEnWord.getText().trim());
@@ -166,7 +211,7 @@ public class WordFormController implements Initializable {
         word.setLevel((Integer) comboBoxLevel.getSelectionModel().getSelectedItem());
         word.setEnSentence(textFieldEnSentence.getText().trim());
         word.setPlSentence(textFieldPlSentence.getText().trim());
-        word.setLesson((Lesson) comboBoxLesson.getSelectionModel().getSelectedItem());
+        word.setLesson(lesson);
         word.setIsReady(0);
         setWordForm(wordRepository.save(word));
         refreshTableView();
@@ -232,10 +277,12 @@ public class WordFormController implements Initializable {
     for (int i = 0; i < memriseScrapper.getEnWords().size(); i++) {
       memriseWords.add(MemriseWord.builder()
           .enWord(memriseScrapper.getEnWords().get(i))
-          .plWord( memriseScrapper.getPlWords().get(i))
+          .plWord(memriseScrapper.getPlWords().get(i))
           .build());
     }
     listViewWords.setItems(FXCollections.observableArrayList(memriseWords));
+
+    initializeShortcut();
   }
 
   public void listViewWordsOnMouseClicked(MouseEvent mouseEvent) {
@@ -243,6 +290,13 @@ public class WordFormController implements Initializable {
     if (memriseWord != null) {
       textFieldEnWord.setText(memriseWord.getEnWord().trim());
       textFieldPlWord.setText(memriseWord.getPlWord().trim());
+    }
+
+    if (sentenceScrapperController.checkBoxTranslate.isSelected()) {
+      sentenceScrapperController.setWordToTranslate(textFieldEnWord.getText());
+      sentenceFormController.buttonClearOnAction(null);
+      sentenceScrapperController.radioButtonEnToPl.selectedProperty().setValue(true);
+      sentenceScrapperController.getTatoebaScrapper().setLanguageEnToPl();
     }
   }
 
@@ -258,6 +312,21 @@ public class WordFormController implements Initializable {
     StringBuilder stringBuilderPl = new StringBuilder();
     memriseWords.forEach(text -> stringBuilderPl.append(text.getPlWord()).append("\n"));
     textAreaPl.setText(stringBuilderPl.toString());
+  }
+
+  public void comboBoxCourseOnAction2(ActionEvent event) {
+    if (!comboBoxCourse2.getSelectionModel().isEmpty()) {
+      //      selectedCourse = (Course) comboBoxCourse2.getSelectionModel().getSelectedItem();
+      initializeLessonComboBox2((Course) comboBoxCourse2.getSelectionModel().getSelectedItem());
+    }
+  }
+
+  public void buttonToLowerEnOnAction(ActionEvent event) {
+    textFieldEnWord.setText(textFieldEnWord.getText().toLowerCase());
+  }
+
+  public void buttonToLowerPlOnAction(ActionEvent event) {
+    textFieldPlWord.setText(textFieldPlWord.getText().toLowerCase());
   }
 
   private void clearForm() {
@@ -306,6 +375,7 @@ public class WordFormController implements Initializable {
   private void initializeCourseComboBox() {
     List<Course> courses = courseRepository.findAll();
     comboBoxCourse.setItems(FXCollections.observableArrayList(courses));
+    comboBoxCourse2.setItems(FXCollections.observableArrayList(courses));
   }
 
   private void initializeLessonComboBox() {
@@ -314,6 +384,15 @@ public class WordFormController implements Initializable {
       lessons.forEach(lesson -> lesson.getCourse().setLessons(null));
       //      List<String> lessonNames = lessons.stream().map(Lesson::getPlName).collect(Collectors.toList());
       comboBoxLesson.setItems(FXCollections.observableArrayList(lessons));
+    });
+  }
+
+  private void initializeLessonComboBox2(Course course) {
+    Optional.ofNullable(course).ifPresent(c -> {
+      List<Lesson> lessons = lessonRepository.findAllByCourse(c);
+      lessons.forEach(lesson -> lesson.getCourse().setLessons(null));
+      //      List<String> lessonNames = lessons.stream().map(Lesson::getPlName).collect(Collectors.toList());
+      comboBoxLesson2.setItems(FXCollections.observableArrayList(lessons));
     });
   }
 
