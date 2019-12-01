@@ -200,7 +200,11 @@ public class WordFormController implements Initializable {
 
   public void buttonDeleteOnAction(ActionEvent event) {
     if (!textFieldId.getText().isEmpty()) {
-      wordRepository.findById(Long.valueOf(textFieldId.getText())).ifPresent(word -> wordRepository.delete(word));
+      wordRepository.findById(Long.valueOf(textFieldId.getText())).ifPresent(word -> {
+        wordRepository.delete(word);
+        int index = wordsTableController.findWordById(word.getId());
+        wordsTableController.getWords().remove(index);
+      });
       // buttonClearOnAction(event);
 //      clearForm();
       refreshTableView();
@@ -238,7 +242,12 @@ public class WordFormController implements Initializable {
         word.setNextRepeat(System.currentTimeMillis());
         word.setLesson(lesson);
         word.setIsReady(0);
-        setWordForm(wordRepository.save(word));
+        word = wordRepository.save(word);
+
+        int index = wordsTableController.findWordById(word.getId());
+        wordsTableController.getWords().set(index, word);
+
+        setWordForm(word);
         refreshTableView();
       });
     }
@@ -276,6 +285,9 @@ public class WordFormController implements Initializable {
           .isReady(0)
           .build();
       word = wordRepository.save(word);
+
+      wordsTableController.getWords().add(word);
+
       setWordForm(word);
       refreshTableView();
       sentenceFormController.textFieldWordId.setText(word.getId().toString());
@@ -442,6 +454,8 @@ public class WordFormController implements Initializable {
       if (!word.getLesson().getEnName().contains("RELEASE")) {
         log.info("Delete word: " + word.toString());
         wordRepository.delete(word);
+        int index = wordsTableController.findWordById(word.getId());
+        wordsTableController.getWords().remove(index);
       }
     }
     refreshTableView();

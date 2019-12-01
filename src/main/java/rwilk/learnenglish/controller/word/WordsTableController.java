@@ -205,7 +205,9 @@ public class WordsTableController implements Initializable {
 
   public void fillInTableView() {
     //if (this.words == null) {
-    this.words = wordRepository.findAll();
+    if (this.words == null) {
+      this.words = wordRepository.findAll();
+    }
     this.words.sort(Comparator.comparing(Word::getNextRepeat).reversed().thenComparing(Word::getId));
     //    this.words.stream().filter(word -> word.getLesson().getEnName().contains("RELEASE")).forEach(word -> word.setNextRepeat(word.getNextRepeat() + word.getNextRepeat()));
     //}
@@ -421,5 +423,10 @@ public class WordsTableController implements Initializable {
     columnWordPl2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.20));
     columnPartOfSpeech2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.075));
     columnLesson2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.85));
+  }
+
+  public int findWordById(Long id) {
+    List<Long> ids = words.stream().map(Word::getId).collect(Collectors.toList());
+    return ids.indexOf(id);
   }
 }
