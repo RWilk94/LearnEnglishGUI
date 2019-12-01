@@ -58,6 +58,7 @@ public class SentenceFormController implements Initializable {
       sentenceOptional.ifPresent(sentence -> {
         sentence.setPlSentence(textFieldPlSentence.getText());
         sentence.setEnSentence(textFieldEnSentence.getText());
+        wordRepository.findById(Long.valueOf(textFieldWordId.getText())).ifPresent(sentence::setWord);
         setSentenceForm(sentenceRepository.save(sentence));
         refreshTableView();
       });

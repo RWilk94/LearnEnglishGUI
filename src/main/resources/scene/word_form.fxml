@@ -42,6 +42,12 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
+        <Button fx:id="buttonMemriseCourse" mnemonicParsing="false" onMouseClicked="#buttonMemriseCourseOnMouseClicked" text="Course"
+          BorderPane.alignment="TOP_RIGHT">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
       </HBox>
 
       <TabPane fx:id="tabPaneTextArea" tabClosingPolicy="UNAVAILABLE"
@@ -87,6 +93,11 @@
         <Button HBox.hgrow="ALWAYS" text="Remove item Ctrl+R" onAction="#buttonRemoveItemOnAction">
           <HBox.margin>
             <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#buttonAllToLowerEnOnAction" text="Lower all">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
       </HBox>
@@ -149,6 +160,13 @@
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
+
+        <Button mnemonicParsing="false" onAction="#buttonReplaceOnAction" text="Replace">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+
       </HBox>
 
       <HBox>
@@ -245,6 +263,11 @@
           </HBox.margin>
         </CheckBox>
         <Button mnemonicParsing="false" onAction="#buttonRefreshOnAction" text="Refresh">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonDeleteAllOnAction" text="Delete All">
           <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>

@@ -41,7 +41,7 @@ public class MainController implements Initializable {
         switch (((Tab) event.getSource()).getText()) {
           case "Word":
             tabPaneTable.getSelectionModel().clearAndSelect(0);
-            wordsTableController.initCourseComboBox();
+            // wordsTableController.initCourseComboBox();
             wordFormController.buttonRefreshOnAction(null);
             break;
           case "Lesson":

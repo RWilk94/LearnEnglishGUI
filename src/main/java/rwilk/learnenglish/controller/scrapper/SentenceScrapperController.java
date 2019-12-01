@@ -56,8 +56,8 @@ public class SentenceScrapperController implements Initializable {
   private WordFormController wordFormController;
   @Autowired
   private SentenceFormController sentenceFormController;
-  private Boolean translate = true;
-  private Boolean replaceDialog = true;
+  private Boolean translate;
+  private Boolean replaceDialog;
   private Boolean wholeWord = true;
   private List<String> sentences;
 
@@ -72,6 +72,9 @@ public class SentenceScrapperController implements Initializable {
             )
         )
     );
+
+    translate = checkBoxTranslate.isSelected();
+    replaceDialog = checkBoxReplace.isSelected();
   }
 
   public void radioButtonDikiOnAction(ActionEvent event) {
@@ -150,8 +153,14 @@ public class SentenceScrapperController implements Initializable {
     radioButtonDiki.selectedProperty().setValue(true);
 
     radioButtonDikiOnAction(null);
-    new Thread(() -> radioButtonWiktionaryOnAction(null)).start();
-    new Thread(() -> radioButtonTatoebaOnAction(null)).start();
+    new Thread(() -> {
+      Optional.ofNullable(wordToTranslate).ifPresent(word -> wiktionaryScrapper.webScraps(word));
+//      radioButtonWiktionaryOnAction(null);
+    }).start();
+    new Thread(() -> {
+      Optional.ofNullable(wordToTranslate).ifPresent(word -> tatoebaScrapper.webScraps(word));
+      // radioButtonTatoebaOnAction(null);
+    }).start();
 
     //    if (radioButtonDiki.isSelected()) {
     //      radioButtonDikiOnAction(null);

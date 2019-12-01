@@ -37,7 +37,7 @@
         <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
       </HBox.margin>
     </Button>
-    <CheckBox fx:id="checkBoxTranslate" mnemonicParsing="false" onAction="#checkBoxTranslateOnAction" selected="true" text="Translate on click">
+    <CheckBox fx:id="checkBoxTranslate" mnemonicParsing="false" onAction="#checkBoxTranslateOnAction" selected="false" text="Translate on click">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
       </HBox.margin>
@@ -48,7 +48,7 @@
         <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
       </HBox.margin>
     </Button>
-    <CheckBox fx:id="checkBoxReplace" mnemonicParsing="false" onAction="#checkBoxReplaceOnAction" selected="true" text="Replace dialog">
+    <CheckBox fx:id="checkBoxReplace" mnemonicParsing="false" onAction="#checkBoxReplaceOnAction" selected="false" text="Replace dialog">
       <HBox.margin>
         <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
       </HBox.margin>

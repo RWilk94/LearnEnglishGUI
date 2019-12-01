@@ -1,11 +1,15 @@
 package rwilk.learnenglish.controller.lesson;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -32,10 +36,24 @@ public class LessonsTableController implements Initializable {
   public TableColumn columnPlName;
   public TableColumn columnCourse;
 
+  private List<Lesson> lessons;
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     initializeTableView();
     fillInTableView();
+
+    textFieldSearch.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        tableLessons.setItems(
+            FXCollections.observableArrayList(
+                lessons.stream().filter(lesson -> lesson.toString().toLowerCase().contains(newValue.toLowerCase())).collect(Collectors.toList())
+            )
+        );
+      }
+    });
+
   }
 
   private void initializeTableView() {
@@ -46,7 +64,8 @@ public class LessonsTableController implements Initializable {
   }
 
   public void fillInTableView() {
-    tableLessons.setItems(FXCollections.observableArrayList(lessonRepository.findAll()));
+    lessons = lessonRepository.findAll();
+    tableLessons.setItems(FXCollections.observableArrayList(lessons));
   }
 
   public void tableViewOnMouseClicked(MouseEvent mouseEvent) {

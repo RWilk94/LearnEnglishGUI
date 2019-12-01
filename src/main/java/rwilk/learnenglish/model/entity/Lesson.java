@@ -56,11 +56,6 @@ public class Lesson implements Serializable {
 
   @Override
   public String toString() {
-    return "Lesson{" +
-        "id=" + id +
-        ", enName='" + enName + '\'' +
-        ", plName='" + plName + '\'' +
-        ", isReady=" + isReady +
-        '}';
+    return id + ". " + enName + " (" + plName + ")";
   }
 }
