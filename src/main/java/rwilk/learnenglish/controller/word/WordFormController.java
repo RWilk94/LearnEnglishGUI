@@ -16,6 +16,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -29,6 +30,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
@@ -138,13 +140,62 @@ public class WordFormController implements Initializable {
       buttonRemoveItemOnAction(null);
     };
 
+    // 71600
     keyCombination = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
     runnable = () -> {
       System.out.println("Ctrl + D");
-      buttonDeleteOnAction(null);
+//      buttonDeleteAllOnAction(null);
+       buttonDeleteOnAction(null);
     };
-
     buttonMemrise.getScene().getAccelerators().put(keyCombination, runnable);
+
+
+    buttonMemrise.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        if (event.getCode() == KeyCode.DIGIT1) {
+          System.out.println("1");
+          button1OnMouseClicked(null);
+        }
+      }
+    });
+    buttonMemrise.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        if (event.getCode() == KeyCode.DIGIT2) {
+          System.out.println("2");
+          button2OnMouseClicked(null);
+        }
+      }
+    });
+    buttonMemrise.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        if (event.getCode() == KeyCode.DIGIT2) {
+          System.out.println("3");
+          button3OnMouseClicked(null);
+        }
+      }
+    });
+    buttonMemrise.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        if (event.getCode() == KeyCode.DIGIT2) {
+          System.out.println("4");
+          button4OnMouseClicked(null);
+        }
+      }
+    });
+    buttonMemrise.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        if (event.getCode() == KeyCode.DIGIT2) {
+          System.out.println("5");
+          button5OnMouseClicked(null);
+        }
+      }
+    });
+
   }
 
   public void buttonExtractOnMouseClicked(MouseEvent mouseEvent) {
@@ -206,7 +257,7 @@ public class WordFormController implements Initializable {
         wordsTableController.getWords().remove(index);
       });
       // buttonClearOnAction(event);
-//      clearForm();
+      //      clearForm();
       refreshTableView();
     }
   }
@@ -266,8 +317,8 @@ public class WordFormController implements Initializable {
     if (!textFieldEnWord.getText().isEmpty()
         && !textFieldPlWord.getText().isEmpty()
         // && !comboBoxPartOfSpeech.getSelectionModel().isEmpty()
-//        && !textFieldPartOfSpeech.getText().isEmpty()
-       // && !comboBoxLevel.getSelectionModel().isEmpty()
+        //        && !textFieldPartOfSpeech.getText().isEmpty()
+        // && !comboBoxLevel.getSelectionModel().isEmpty()
         //&& ((!textFieldEnSentence.getText().isEmpty() && !textFieldPlSentence.getText().isEmpty()) ||
         // (textFieldEnSentence.getText().isEmpty() && textFieldPlSentence.getText().isEmpty()))
         // && !comboBoxLesson.getSelectionModel().isEmpty()) {
@@ -323,9 +374,15 @@ public class WordFormController implements Initializable {
   public void setTranslateWord(String selectedItem) {
     if (selectedItem.startsWith("[")) {
       textFieldPartOfSpeech.setText(selectedItem.substring(selectedItem.indexOf("[") + 1, selectedItem.indexOf("]")));
+    } else if (selectedItem.contains("BrE") || selectedItem.contains("AmE")) {
+      textFieldEnWord.setText(selectedItem.substring(0, selectedItem.indexOf("(")));
+      textFieldPlWord.setText(textFieldPlWord.getText().replace(" (BrE)", ""));
+      textFieldPlWord.setText(textFieldPlWord.getText().replace(" (AmE)", ""));
+      textFieldPlWord.setText(textFieldPlWord.getText().trim() + " " + selectedItem.substring(selectedItem.indexOf("("), selectedItem.indexOf(")") + 1));
     } else {
       textFieldPlWord.setText(selectedItem);
     }
+
   }
 
   public void buttonMemriseOnMouseClicked(MouseEvent mouseEvent) {
@@ -364,9 +421,9 @@ public class WordFormController implements Initializable {
             }
           }
 
-//          wordsTableController.getWords().forEach(word -> {
-//
-//          });
+          //          wordsTableController.getWords().forEach(word -> {
+          //
+          //          });
         } else {
           setText(null);
           setStyle(null);
@@ -467,6 +524,54 @@ public class WordFormController implements Initializable {
     textFieldPlWord.setText(text);
   }
 
+  public void buttonMemriseCourseOnMouseClicked(MouseEvent mouseEvent) {
+    memriseCourseScrapper.webScrap(textFieldExtractWord.getText());
+  }
+
+  public void button1OnMouseClicked(MouseEvent mouseEvent) {
+    Optional<Word> optionalWord = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    optionalWord.ifPresent(word -> {
+      word.setLevel(1);
+      wordRepository.save(word);
+    });
+  }
+
+  public void button2OnMouseClicked(MouseEvent mouseEvent) {
+    Optional<Word> optionalWord = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    optionalWord.ifPresent(word -> {
+      word.setLevel(2);
+      wordRepository.save(word);
+    });
+
+  }
+
+  public void button3OnMouseClicked(MouseEvent mouseEvent) {
+    Optional<Word> optionalWord = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    optionalWord.ifPresent(word -> {
+      word.setLevel(3);
+      wordRepository.save(word);
+    });
+
+  }
+
+  public void button4OnMouseClicked(MouseEvent mouseEvent) {
+    Optional<Word> optionalWord = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    optionalWord.ifPresent(word -> {
+      word.setLevel(4);
+      wordRepository.save(word);
+    });
+
+  }
+
+  public void button5OnMouseClicked(MouseEvent mouseEvent) {
+    Optional<Word> optionalWord = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    optionalWord.ifPresent(word -> {
+      word.setLevel(5);
+      wordRepository.save(word);
+    });
+
+  }
+
   private void clearForm() {
     textFieldId.clear();
     textFieldEnWord.clear();
@@ -538,9 +643,5 @@ public class WordFormController implements Initializable {
 
   private void refreshTableView() {
     wordsTableController.fillInTableView();
-  }
-
-  public void buttonMemriseCourseOnMouseClicked(MouseEvent mouseEvent) {
-    memriseCourseScrapper.webScrap(textFieldExtractWord.getText());
   }
 }

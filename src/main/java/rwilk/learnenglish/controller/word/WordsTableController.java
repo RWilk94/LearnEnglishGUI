@@ -4,7 +4,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -26,7 +29,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.SwipeEvent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import rwilk.learnenglish.controller.scrapper.SentenceScrapperController;
@@ -71,6 +76,8 @@ public class WordsTableController implements Initializable {
   public TableColumn columnLesson2;
   public TextField textFieldSearchPl;
   public CheckBox checkBoxAnd;
+  public TableColumn columnOrder;
+  public TextField textFieldOrder;
   @Autowired
   private WordRepository wordRepository;
   @Autowired
@@ -182,6 +189,28 @@ public class WordsTableController implements Initializable {
     textFieldSearch.clear();
     // comboBoxFilterCourse.getSelectionModel().select(null);
     // comboBoxFilterLesson.getSelectionModel().select(null);
+
+    // Remove duplicated words
+    //    List<Word> releaseCourse =
+    //        words.stream().filter(word -> word.getLesson().getCourse().getId().compareTo(28L) == 0).collect(Collectors.toList());
+    //
+    //    this.words.removeAll(releaseCourse);
+    //    List<Word> duplicated = new ArrayList<>(this.words);
+    //
+    //    List<Word> wordsToDelete = new ArrayList<>();
+    //    for (Word word : duplicated) {
+    //      words.stream().forEach(w -> {
+    //        if (word.getPlWord().equalsIgnoreCase(w.getPlWord()) && word.getEnWord().equalsIgnoreCase(w.getEnWord()) && w.getId().compareTo(word.getId()) != 0) {
+    //          wordsToDelete.add(w);
+    //        }
+    //      });
+    //    }
+    //
+    //    List<Word> wordsToDelete2 = wordsToDelete.stream().filter(w -> w.getSentences().isEmpty()).collect(Collectors.toList());
+    //    for (Word wordToDelete : wordsToDelete2) {
+    //      wordRepository.delete(wordToDelete);
+    //    }
+
   }
 
   //  public void comboBoxFilterCourseOnAction(ActionEvent event) {
@@ -208,7 +237,7 @@ public class WordsTableController implements Initializable {
     if (this.words == null) {
       this.words = wordRepository.findAll();
     }
-    this.words.sort(Comparator.comparing(Word::getNextRepeat).reversed().thenComparing(Word::getId));
+    this.words.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getNextRepeat).thenComparing(Word::getId));
     //    this.words.stream().filter(word -> word.getLesson().getEnName().contains("RELEASE")).forEach(word -> word.setNextRepeat(word.getNextRepeat() + word.getNextRepeat()));
     //}
 
@@ -225,21 +254,34 @@ public class WordsTableController implements Initializable {
     filterTable(textFieldSearch.getText());
 
     this.words2 = new ArrayList<>(this.words);
-    this.words2.sort(Comparator.comparing(Word::getNextRepeat).thenComparing(Word::getId));
+    this.words2.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
     this.tableWords2.setItems(FXCollections.observableArrayList(words2));
     this.filterTable2(this.textFieldSearch2.getText());
     this.filterTableByLesson2(this.textFieldSearchLesson2.getText());
     this.filterTableByCourse2(this.textFieldSearchCourse2.getText());
   }
 
-  public void tableViewOnMouseClicked(MouseEvent mouseEvent) {
+  public void tableViewOnMouseClicked(MouseEvent event) {
+    onChangeFocus(((TableView)event.getSource()).getId());
+  }
+
+
+//  public void tableViewOnSwipeDown(SwipeEvent event) {
+//    onChangeFocus(((TableView)event.getSource()).getId());
+//  }
+
+  public void tableViewOnKeyPressed(KeyEvent event) {
+    onChangeFocus(((TableView)event.getSource()).getId());
+  }
+
+  private void onChangeFocus(String id) {
     Word selectedWord;
-    if (((TableView) mouseEvent.getSource()).getId().equals("tableWords")) {
+    if (id.equals("tableWords")) {
       selectedWord = (Word) tableWords.getSelectionModel().getSelectedItem();
     } else {
       selectedWord = (Word) tableWords2.getSelectionModel().getSelectedItem();
     }
-
+    log.info(selectedWord.toString());
     if (selectedWord != null) {
       if (!wordFormController.textFieldEnWord.getText().isEmpty() && !wordFormController.textFieldEnWord.getText()
           .equalsIgnoreCase(selectedWord.getEnWord()) && sentenceScrapperController.getReplaceDialog()) {
@@ -265,15 +307,95 @@ public class WordsTableController implements Initializable {
     filterTable(textFieldSearch.getText());
   }
 
+  public void upOrder(MouseEvent mouseEvent) {
+    Word selectedWord = (Word) tableWords.getSelectionModel().getSelectedItem();
+    List<Word> selectedWords = tableWords.getItems();
+    if (selectedWord != null) {
+      int index = selectedWords.indexOf(selectedWord);
+      if (selectedWord.getOrder() > 1) {
+        selectedWords.get(index - 1).setOrder(selectedWords.get(index - 1).getOrder() + 1);
+        selectedWords.get(index).setOrder(selectedWords.get(index).getOrder() - 1);
+        selectedWords.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
+      }
+      tableWords.setItems(FXCollections.observableArrayList(selectedWords));
+    }
+  }
+
+  public void downOrder(MouseEvent mouseEvent) {
+    Word selectedWord = (Word) tableWords.getSelectionModel().getSelectedItem();
+    List<Word> selectedWords = tableWords.getItems();
+    if (selectedWord != null) {
+      int index = selectedWords.indexOf(selectedWord);
+      selectedWords.get(index + 1).setOrder(selectedWords.get(index + 1).getOrder() - 1);
+      selectedWords.get(index).setOrder(selectedWords.get(index).getOrder() + 1);
+      selectedWords.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
+      tableWords.setItems(FXCollections.observableArrayList(selectedWords));
+    }
+  }
+
+  public void setOrder(MouseEvent mouseEvent) {
+    if (textFieldOrder.getText().equals("-1") || textFieldOrder.getText().isEmpty()) {
+      List<Word> selectedWords = tableWords.getItems();
+      AtomicInteger atomicInteger = new AtomicInteger(1);
+      selectedWords.stream().forEach(word -> word.setOrder(atomicInteger.getAndIncrement()));
+//      selectedWords.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
+//      tableWords.setItems(null);
+      tableWords.setItems(FXCollections.observableArrayList(selectedWords));
+    } else {
+      Word selectedWord = (Word) tableWords.getSelectionModel().getSelectedItem();
+      List<Word> selectedWords = tableWords.getItems();
+      selectedWords.remove(selectedWord);
+
+      // TODO ogarnąć to...
+      int orderToSet = Integer.valueOf(textFieldOrder.getText());
+      selectedWord.setOrder(orderToSet);
+      List<Integer> orders = selectedWords.stream().map(Word::getOrder).collect(Collectors.toList());
+      int indexOfOrder = orders.indexOf(orderToSet);
+      if (indexOfOrder != -1) {
+        for (int i = indexOfOrder; i < selectedWords.size(); i++) {
+          selectedWords.get(i).setOrder(selectedWords.get(i).getOrder() + 1);
+        }
+        selectedWords.add(indexOfOrder, selectedWord);
+      } else {
+        selectedWords.add(selectedWord);
+      }
+      selectedWords.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
+      tableWords.setItems(FXCollections.observableArrayList(selectedWords));
+    }
+  }
+
+  public void saveOrder(MouseEvent mouseEvent) {
+    List<Word> selectedWords = tableWords.getItems();
+
+    for (Word selectedWord : selectedWords) {
+      Optional<Word> word = wordRepository.findById(selectedWord.getId());
+      word.ifPresent(word1 -> {
+        word1.setOrder(selectedWord.getOrder());
+        word1 = wordRepository.save(word1);
+        this.words.set(findWordById(word1.getId()), word1);
+      });
+    }
+
+  }
+
   //  public void initCourseComboBox() {
   //    List<Course> courses = courseRepository.findAll();
   //    comboBoxFilterCourse.setItems(FXCollections.observableArrayList(courses));
   //  }
 
+  public int findWordById(Long id) {
+    List<Long> ids = words.stream().map(Word::getId).collect(Collectors.toList());
+    return ids.indexOf(id);
+  }
+
+
   private void updateRowItem(Word item, TableRow<Word> wordTableRow) {
     if (item != null && item.getLesson() != null && item.getLesson().getCourse() != null && item.getLesson().getCourse().toString()
         .contains("RELEASE")) {
       wordTableRow.setStyle("-fx-background-color: lightgreen");
+    } else if (item != null && item.getLesson() != null && item.getLesson().getCourse() != null && item.getLesson().getCourse().toString()
+        .contains("KURS VERSION")) {
+      wordTableRow.setStyle("-fx-background-color: #55ba45");
     } else if (item != null && item.getSentences() != null && !item.getSentences().isEmpty()) {
       wordTableRow.setStyle("-fx-background-color: lightblue");
     } else {
@@ -332,11 +454,6 @@ public class WordsTableController implements Initializable {
     }
   }
 
-  private String clearString(String text) {
-    text = text.replaceAll("[^a-zA-Z0-9 ']", "");
-    return text;
-  }
-
   //  private boolean compareString(String s1, String s2) {
   //    if (!s1.contains("'") && !s2.contains("'")) {
   //      return s1.contains(s2);
@@ -346,6 +463,11 @@ public class WordsTableController implements Initializable {
   //
   //    }
   //  };
+
+  private String clearString(String text) {
+    text = text.replaceAll("[^a-zA-Z0-9 ']", "");
+    return text;
+  }
 
   private void filterTable2(String value) {
     if (StringUtils.isNotEmpty(value)) {
@@ -364,11 +486,11 @@ public class WordsTableController implements Initializable {
   }
 
   private void filterTableByLesson(String value) {
+    List<Word> wordList = words.stream().filter(word -> word.getLesson().getEnName().toLowerCase().contains(value.toLowerCase()))
+        .collect(Collectors.toList());
+//    wordList.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
     tableWords.setItems(
-        FXCollections.observableArrayList(
-            words.stream().filter(word -> word.getLesson().getEnName().toLowerCase().contains(value.toLowerCase()))
-                .collect(Collectors.toList())
-        )
+        FXCollections.observableArrayList(wordList)
     );
   }
 
@@ -392,6 +514,11 @@ public class WordsTableController implements Initializable {
     );
   }
 
+  //  private void initLessonComboBox(Course course) {
+  //    List<Lesson> lessons = lessonRepository.findAllByCourse(course);
+  //    comboBoxFilterLesson.setItems(FXCollections.observableArrayList(lessons));
+  //  }
+
   private void filterTableByCourse2(String value) {
     if (StringUtils.isNotEmpty(value)) {
       tableWords2.setItems(
@@ -403,12 +530,8 @@ public class WordsTableController implements Initializable {
     }
   }
 
-  //  private void initLessonComboBox(Course course) {
-  //    List<Lesson> lessons = lessonRepository.findAllByCourse(course);
-  //    comboBoxFilterLesson.setItems(FXCollections.observableArrayList(lessons));
-  //  }
-
   private void initializeTableView() {
+    columnOrder.prefWidthProperty().bind(tableWords.widthProperty().multiply(0.05));
     columnId.prefWidthProperty().bind(tableWords.widthProperty().multiply(0.05));
     columnWordEn.prefWidthProperty().bind(tableWords.widthProperty().multiply(0.20));
     columnWordPl.prefWidthProperty().bind(tableWords.widthProperty().multiply(0.20));
@@ -423,10 +546,5 @@ public class WordsTableController implements Initializable {
     columnWordPl2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.20));
     columnPartOfSpeech2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.075));
     columnLesson2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.85));
-  }
-
-  public int findWordById(Long id) {
-    List<Long> ids = words.stream().map(Word::getId).collect(Collectors.toList());
-    return ids.indexOf(id);
   }
 }

@@ -21,6 +21,7 @@ public class DikiScrapper {
   @Autowired
   private SentenceScrapperController sentenceScrapperController;
 
+
   public void webScraps(String englishWord) {
     this.englishWord = englishWord;
     ArrayList<String> partOfSpeechList = new ArrayList<>();
@@ -30,6 +31,27 @@ public class DikiScrapper {
     try {
       Document document = Jsoup.connect("http://www.diki.pl/slownik-angielskiego?q=" + englishWord).timeout(6000).get();
       Elements elements = document.select("div.diki-results-left-column"); //select("span.partOfSpeech");
+
+
+      Elements wordVersions = elements.get(0).select("div.hws").get(0).select("span.hw");
+      Elements englishVersions = elements.get(0).select("div.hws").get(0).select("a.languageVariety");
+      // z tego foreach
+      if (wordVersions.size() == englishVersions.size()) {
+        for (int i = 0; i < wordVersions.size(); i++) {
+          translationsList.add(wordVersions.get(i).text() + " (" + mapWordVersion(englishVersions.get(i).text()) + ")");
+        }
+      }
+
+
+//      Elements wordVersions = elements.get(0).select("div.hws").select("span.hw");
+////      Elements englishVersions = elements.get(0).select("span.recordingsAndTranscriptions");
+//      Elements englishVersions = elements.get(0).select("a.languageVariety");
+//      if (wordVersions.size() <= englishVersions.size()) {
+//        for (int i = 0; i < wordVersions.size(); i++) {
+//          translationsList.add(wordVersions.get(i).text() + " (" + mapWordVersion(elements.get(0).select("span.recordingsAndTranscriptions").get(i).child(0).attr("title")) + ")");
+//        }
+//      }
+
       for (Element element : elements.select("span.partOfSpeech")) {
         partOfSpeechList.add(element.text());
       }
@@ -89,4 +111,15 @@ public class DikiScrapper {
   public String getEnglishWord() {
     return englishWord;
   }
+
+  private String mapWordVersion(String wordVersion) {
+    if (wordVersion.equals("British&nbsp;English") || wordVersion.equals("British English")) {
+      return "BrE";
+    } else if (wordVersion.equals("American&nbsp;English") || wordVersion.equals("American English")) {
+      return "AmE";
+    } else {
+      return wordVersion;
+    }
+  }
+
 }

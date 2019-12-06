@@ -67,6 +67,8 @@ public class Word implements Serializable {
   Integer isReady;
   @Column(name = "level")
   Integer level; // means from which level is word (A1 - C2)
+  @Column(name = "current_order", columnDefinition = "integer default 1000")
+  Integer order;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "lesson_id", nullable = false, referencedColumnName = "id")
