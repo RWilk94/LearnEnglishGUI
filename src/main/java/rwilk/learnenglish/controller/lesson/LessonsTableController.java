@@ -23,11 +23,6 @@ import rwilk.learnenglish.repository.LessonRepository;
 @Component
 public class LessonsTableController implements Initializable {
 
-  @Autowired
-  private LessonRepository lessonRepository;
-  @Autowired
-  private LessonFormController lessonFormController;
-
   public TextField textFieldSearch;
   public Button buttonSearch;
   public TableView tableLessons;
@@ -35,7 +30,10 @@ public class LessonsTableController implements Initializable {
   public TableColumn columnEnName;
   public TableColumn columnPlName;
   public TableColumn columnCourse;
-
+  @Autowired
+  private LessonRepository lessonRepository;
+  @Autowired
+  private LessonFormController lessonFormController;
   private List<Lesson> lessons;
 
   @Override
@@ -43,24 +41,25 @@ public class LessonsTableController implements Initializable {
     initializeTableView();
     fillInTableView();
 
+    textFieldSearch.setOnMouseClicked(event -> filterTable(textFieldSearch.getText()));
+
     textFieldSearch.textProperty().addListener(new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        tableLessons.setItems(
-            FXCollections.observableArrayList(
-                lessons.stream().filter(lesson -> lesson.toString().toLowerCase().contains(newValue.toLowerCase())).collect(Collectors.toList())
-            )
-        );
+        filterTable(newValue);
       }
     });
 
   }
 
-  private void initializeTableView() {
-    columnId.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.05));
-    columnEnName.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.30));
-    columnPlName.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.30));
-    columnCourse.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.35));
+  private void filterTable(String newValue) {
+    tableLessons.setItems(
+        FXCollections.observableArrayList(
+            lessons.stream().filter(lesson -> lesson.toString().toLowerCase().contains(newValue.toLowerCase())
+                || lesson.getCourse().toString().toLowerCase().contains(newValue.toLowerCase()))
+                .collect(Collectors.toList())
+        )
+    );
   }
 
   public void fillInTableView() {
@@ -73,5 +72,12 @@ public class LessonsTableController implements Initializable {
       Lesson selectedLesson = (Lesson) tableLessons.getSelectionModel().getSelectedItem();
       lessonFormController.setLessonForm(selectedLesson);
     }
+  }
+
+  private void initializeTableView() {
+    columnId.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.05));
+    columnEnName.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.30));
+    columnPlName.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.30));
+    columnCourse.prefWidthProperty().bind(tableLessons.widthProperty().multiply(0.35));
   }
 }

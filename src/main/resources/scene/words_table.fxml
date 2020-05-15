@@ -13,215 +13,249 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.layout.Region?>
-<SplitPane dividerPositions="0.8, 0.5" orientation="VERTICAL" prefHeight="700" prefWidth="800" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rwilk.learnenglish.controller.word.WordsTableController">
-  <VBox>
-    <HBox>
-      <CheckBox fx:id="checkBoxWholeWord" mnemonicParsing="false" onAction="#checkBoxWholeWordOnAction" selected="false">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
-        </HBox.margin>
-      </CheckBox>
-      <TextField fx:id="textFieldSearch" promptText="Search words here..." HBox.hgrow="ALWAYS">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </HBox.margin>
-      </TextField>
-      <CheckBox fx:id="checkBoxAnd" mnemonicParsing="false" text="AND">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="7.5" />
-        </HBox.margin>
-      </CheckBox>
-      <TextField fx:id="textFieldSearchPl" promptText="Search words here..." HBox.hgrow="ALWAYS">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </HBox.margin>
-      </TextField>
+<SplitPane fx:id="splitPaneHorizontal" dividerPositions="0.0" orientation="HORIZONTAL"
+  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+  xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="rwilk.learnenglish.controller.word.WordsTableController">
 
-      <!--<ComboBox fx:id="comboBoxFilterCourse" minWidth="100" onAction="#comboBoxFilterCourseOnAction" prefWidth="150.0">-->
-      <!--<HBox.margin>-->
-      <!--<Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>-->
-      <!--</HBox.margin>-->
-      <!--</ComboBox>-->
-
-      <!--<ComboBox fx:id="comboBoxFilterLesson" minWidth="100" prefWidth="150.0" onAction="#comboBoxFilterLessonOnAction">-->
-      <!--<HBox.margin>-->
-      <!--<Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>-->
-      <!--</HBox.margin>-->
-      <!--</ComboBox>-->
-
-      <Button mnemonicParsing="false" onAction="#buttonClearFilterOnAction" text="Clear">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </HBox.margin>
-      </Button>
-    </HBox>
-    <HBox>
-      <TextField fx:id="textFieldSearchLesson" promptText="Search lesson here..." HBox.hgrow="ALWAYS">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </HBox.margin>
-      </TextField>
-      <TextField fx:id="textFieldSearchCourse" promptText="Search course here..." HBox.hgrow="ALWAYS">
-        <HBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </HBox.margin>
-      </TextField>
-    </HBox>
-
-    <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-      <VBox minWidth="60">
-        <Button onMouseClicked="#upOrder" text="up">
-          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </VBox.margin>
-        </Button>
-        <Button onMouseClicked="#downOrder" text="down">
-          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </VBox.margin>
-        </Button>
-        <TextField fx:id="textFieldOrder" maxWidth="40" minWidth="40">
-          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </VBox.margin>
-        </TextField>
-        <Button onMouseClicked="#setOrder" text="Set">
-          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </VBox.margin>
-        </Button>
-        <Region VBox.vgrow="ALWAYS" />
-        <Button alignment="BOTTOM_CENTER" onMouseClicked="#saveOrder" text="Save" VBox.vgrow="ALWAYS">
-          <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </VBox.margin>
-        </Button>
-      </VBox>
-
-      <TableView fx:id="tableWords" onMouseClicked="#tableViewOnMouseClicked" onKeyReleased="#tableViewOnKeyPressed" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-        <columns>
-          <TableColumn fx:id="columnOrder" minWidth="20.0" prefWidth="-1.0" text="Order">
-            <cellValueFactory>
-              <PropertyValueFactory property="order" />
-            </cellValueFactory>
-          </TableColumn>
-          <TableColumn fx:id="columnId" minWidth="20.0" prefWidth="-1.0" text="Id">
-            <cellValueFactory>
-              <PropertyValueFactory property="id" />
-            </cellValueFactory>
-          </TableColumn>
-
-          <TableColumn fx:id="columnWordEn" minWidth="20.0" prefWidth="-1.0" text="En Word">
-            <cellValueFactory>
-              <PropertyValueFactory property="enWord" />
-            </cellValueFactory>
-          </TableColumn>
-
-          <TableColumn fx:id="columnWordPl" minWidth="20.0" prefWidth="-1.0" text="Pl Word">
-            <cellValueFactory>
-              <PropertyValueFactory property="plWord" />
-            </cellValueFactory>
-          </TableColumn>
-
-          <TableColumn fx:id="columnPartOfSpeech" minWidth="20.0" prefWidth="-1.0" text="Part of Speech">
-            <cellValueFactory>
-              <PropertyValueFactory property="partOfSpeech" />
-            </cellValueFactory>
-          </TableColumn>
-
-          <TableColumn fx:id="columnLevel" minWidth="20.0" prefWidth="-1.0" text="Level">
-            <cellValueFactory>
-              <PropertyValueFactory property="level" />
-            </cellValueFactory>
-          </TableColumn>
-
-          <!--<TableColumn fx:id="columnEnSentence" minWidth="20.0" prefWidth="-1.0" text="En Sentence">-->
-          <!--<cellValueFactory>-->
-          <!--<PropertyValueFactory property="enSentence"/>-->
-          <!--</cellValueFactory>-->
-          <!--</TableColumn>-->
-
-          <!--<TableColumn fx:id="columnPlSentence" minWidth="20.0" prefWidth="-1.0" text="Pl Sentence">-->
-          <!--<cellValueFactory>-->
-          <!--<PropertyValueFactory property="plSentence"/>-->
-          <!--</cellValueFactory>-->
-          <!--</TableColumn>-->
-
-          <TableColumn fx:id="columnLesson" minWidth="20.0" prefWidth="-1.0" text="Lesson">
-            <cellValueFactory>
-              <PropertyValueFactory property="lesson" />
-            </cellValueFactory>
-          </TableColumn>
-        </columns>
-
-        <VBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" />
-        </VBox.margin>
-      </TableView>
-    </HBox>
-  </VBox>
-
-  <SplitPane orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+  <HBox fx:id="HBoxGroupViewPane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" minWidth="0" visible="false">
+    <fx:include source="group_view.fxml"/>
+  </HBox>
+  <SplitPane dividerPositions="0.8, 0.5" orientation="VERTICAL" prefHeight="700" prefWidth="800" AnchorPane.bottomAnchor="0.0"
+    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+    xmlns:fx="http://javafx.com/fxml/1">
     <VBox>
       <HBox>
-        <TextField fx:id="textFieldSearch2" promptText="Search words here..." HBox.hgrow="ALWAYS">
+        <CheckBox fx:id="checkBoxWholeWord" mnemonicParsing="false" onAction="#checkBoxWholeWordOnAction" selected="false">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="7.5"/>
+          </HBox.margin>
+        </CheckBox>
+        <TextField fx:id="textFieldSearch" promptText="Search words here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
-        <TextField fx:id="textFieldSearchLesson2" promptText="Search lesson here..." text="RELEASE" HBox.hgrow="ALWAYS">
+        <CheckBox fx:id="checkBoxAnd" mnemonicParsing="false" text="AND">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="7.5"/>
+          </HBox.margin>
+        </CheckBox>
+        <TextField fx:id="textFieldSearchPl" promptText="Search words here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
-        <TextField fx:id="textFieldSearchCourse2" promptText="Search course here..." HBox.hgrow="ALWAYS">
+
+        <!--<ComboBox fx:id="comboBoxFilterCourse" minWidth="100" onAction="#comboBoxFilterCourseOnAction" prefWidth="150.0">-->
+        <!--<HBox.margin>-->
+        <!--<Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>-->
+        <!--</HBox.margin>-->
+        <!--</ComboBox>-->
+
+        <!--<ComboBox fx:id="comboBoxFilterLesson" minWidth="100" prefWidth="150.0" onAction="#comboBoxFilterLessonOnAction">-->
+        <!--<HBox.margin>-->
+        <!--<Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>-->
+        <!--</HBox.margin>-->
+        <!--</ComboBox>-->
+
+        <Button mnemonicParsing="false" onAction="#buttonClearFilterOnAction" text="Clear">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+      </HBox>
+      <HBox>
+        <TextField fx:id="textFieldSearchLesson" promptText="Search lesson here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </TextField>
+        <TextField fx:id="textFieldSearchCourse" promptText="Search course here..." HBox.hgrow="ALWAYS">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
       </HBox>
 
-      <TableView fx:id="tableWords2" onMouseClicked="#tableViewOnMouseClicked" onKeyReleased="#tableViewOnKeyPressed" VBox.vgrow="ALWAYS">
-        <columns>
-          <TableColumn fx:id="columnId2" minWidth="20.0" prefWidth="-1.0" text="Id">
-            <cellValueFactory>
-              <PropertyValueFactory property="id" />
-            </cellValueFactory>
-          </TableColumn>
+      <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <VBox minWidth="60">
+          <Button onMouseClicked="#upOrder" text="up">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+          <Button onMouseClicked="#downOrder" text="down">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+          <TextField fx:id="textFieldOrder" maxWidth="40" minWidth="40">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </TextField>
+          <Button onMouseClicked="#setOrder" text="Set">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+          <Region VBox.vgrow="ALWAYS"/>
+          <TextField fx:id="textFieldOriginalId" maxWidth="60" minWidth="40">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </TextField>
+          <Button text="copy" onAction="#copySentencesOnAction">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+          <Button text="delete" onAction="#deleteWordOnAction">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+          <Button text="deleteAll" onAction="#buttonDeleteAllOnAction">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+          <Region VBox.vgrow="ALWAYS"/>
+          <Button alignment="BOTTOM_CENTER" onMouseClicked="#saveOrder" text="Save" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </VBox.margin>
+          </Button>
+        </VBox>
 
-          <TableColumn fx:id="columnWordEn2" minWidth="20.0" prefWidth="-1.0" text="En Word">
-            <cellValueFactory>
-              <PropertyValueFactory property="enWord" />
-            </cellValueFactory>
-          </TableColumn>
+        <TableView fx:id="tableWords" onMouseClicked="#tableViewOnMouseClicked" onKeyReleased="#tableViewOnKeyPressed" HBox.hgrow="ALWAYS"
+          VBox.vgrow="ALWAYS">
+          <columns>
+            <TableColumn fx:id="columnOrder" minWidth="20.0" prefWidth="-1.0" text="Order">
+              <cellValueFactory>
+                <PropertyValueFactory property="order"/>
+              </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="columnId" minWidth="20.0" prefWidth="-1.0" text="Id">
+              <cellValueFactory>
+                <PropertyValueFactory property="id"/>
+              </cellValueFactory>
+            </TableColumn>
 
-          <TableColumn fx:id="columnWordPl2" minWidth="20.0" prefWidth="-1.0" text="Pl Word">
-            <cellValueFactory>
-              <PropertyValueFactory property="plWord" />
-            </cellValueFactory>
-          </TableColumn>
+            <TableColumn fx:id="columnWordEn" minWidth="20.0" prefWidth="-1.0" text="En Word">
+              <cellValueFactory>
+                <PropertyValueFactory property="enWord"/>
+              </cellValueFactory>
+            </TableColumn>
 
-          <TableColumn fx:id="columnPartOfSpeech2" minWidth="20.0" prefWidth="-1.0" text="Part of Speech">
-            <cellValueFactory>
-              <PropertyValueFactory property="partOfSpeech" />
-            </cellValueFactory>
-          </TableColumn>
+            <TableColumn fx:id="columnWordPl" minWidth="20.0" prefWidth="-1.0" text="Pl Word">
+              <cellValueFactory>
+                <PropertyValueFactory property="plWord"/>
+              </cellValueFactory>
+            </TableColumn>
 
-          <TableColumn fx:id="columnLesson2" minWidth="20.0" prefWidth="-1.0" text="Lesson">
-            <cellValueFactory>
-              <PropertyValueFactory property="lesson" />
-            </cellValueFactory>
-          </TableColumn>
-        </columns>
+            <TableColumn fx:id="columnPartOfSpeech" minWidth="20.0" prefWidth="-1.0" text="Part of Speech">
+              <cellValueFactory>
+                <PropertyValueFactory property="partOfSpeech"/>
+              </cellValueFactory>
+            </TableColumn>
 
-        <VBox.margin>
-          <Insets bottom="5.0" left="5.0" right="5.0" />
-        </VBox.margin>
-      </TableView>
+            <TableColumn fx:id="columnLevel" minWidth="20.0" prefWidth="-1.0" text="Level">
+              <cellValueFactory>
+                <PropertyValueFactory property="level"/>
+              </cellValueFactory>
+            </TableColumn>
+
+            <!--<TableColumn fx:id="columnEnSentence" minWidth="20.0" prefWidth="-1.0" text="En Sentence">-->
+            <!--<cellValueFactory>-->
+            <!--<PropertyValueFactory property="enSentence"/>-->
+            <!--</cellValueFactory>-->
+            <!--</TableColumn>-->
+
+            <!--<TableColumn fx:id="columnPlSentence" minWidth="20.0" prefWidth="-1.0" text="Pl Sentence">-->
+            <!--<cellValueFactory>-->
+            <!--<PropertyValueFactory property="plSentence"/>-->
+            <!--</cellValueFactory>-->
+            <!--</TableColumn>-->
+
+            <TableColumn fx:id="columnLesson" minWidth="20.0" prefWidth="-1.0" text="Lesson">
+              <cellValueFactory>
+                <PropertyValueFactory property="lesson"/>
+              </cellValueFactory>
+            </TableColumn>
+          </columns>
+
+          <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0"/>
+          </VBox.margin>
+        </TableView>
+      </HBox>
     </VBox>
-  </SplitPane>
-  <VBox>
-    <fx:include source="sentence_table.fxml" />
-  </VBox>
 
+    <SplitPane orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+      AnchorPane.topAnchor="0.0">
+      <VBox>
+        <HBox>
+          <TextField fx:id="textFieldSearch2" promptText="Search words here..." HBox.hgrow="ALWAYS">
+            <HBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+          </TextField>
+          <TextField fx:id="textFieldSearchLesson2" promptText="Search lesson here..." text="RELEASE" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+          </TextField>
+          <TextField fx:id="textFieldSearchCourse2" promptText="Search course here..." HBox.hgrow="ALWAYS">
+            <HBox.margin>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+          </TextField>
+        </HBox>
+
+        <TableView fx:id="tableWords2" onMouseClicked="#tableViewOnMouseClicked" onKeyReleased="#tableViewOnKeyPressed" VBox.vgrow="ALWAYS">
+          <columns>
+            <TableColumn fx:id="columnId2" minWidth="20.0" prefWidth="-1.0" text="Id">
+              <cellValueFactory>
+                <PropertyValueFactory property="id"/>
+              </cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="columnWordEn2" minWidth="20.0" prefWidth="-1.0" text="En Word">
+              <cellValueFactory>
+                <PropertyValueFactory property="enWord"/>
+              </cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="columnWordPl2" minWidth="20.0" prefWidth="-1.0" text="Pl Word">
+              <cellValueFactory>
+                <PropertyValueFactory property="plWord"/>
+              </cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="columnPartOfSpeech2" minWidth="20.0" prefWidth="-1.0" text="Part of Speech">
+              <cellValueFactory>
+                <PropertyValueFactory property="partOfSpeech"/>
+              </cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="columnLesson2" minWidth="20.0" prefWidth="-1.0" text="Lesson">
+              <cellValueFactory>
+                <PropertyValueFactory property="lesson"/>
+              </cellValueFactory>
+            </TableColumn>
+          </columns>
+
+          <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0"/>
+          </VBox.margin>
+        </TableView>
+      </VBox>
+    </SplitPane>
+    <VBox>
+      <fx:include source="sentence_table.fxml"/>
+    </VBox>
+
+  </SplitPane>
 </SplitPane>

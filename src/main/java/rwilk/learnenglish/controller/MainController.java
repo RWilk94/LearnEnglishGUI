@@ -6,8 +6,10 @@ import java.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ public class MainController implements Initializable {
 
   public TabPane tabPaneForm;
   public TabPane tabPaneTable;
+  public CheckBox checkBoxShowGroupViewPanel;
   private boolean selectTabPaneForm = true; // initialize by true, because it's change to false when run the app
   private boolean selectTabPaneTable = false;
   @Autowired
@@ -79,4 +82,14 @@ public class MainController implements Initializable {
     }
   }
 
+  public void showGroupViewPanelCheckBoxOnAction(ActionEvent event) {
+    if (checkBoxShowGroupViewPanel.isSelected()) {
+      wordsTableController.getHBoxGroupViewPane().setVisible(true);
+      wordsTableController.getSplitPaneHorizontal().setDividerPosition(0, 0.2);
+    } else {
+      wordsTableController.getHBoxGroupViewPane().setVisible(false);
+      wordsTableController.getSplitPaneHorizontal().setDividerPosition(0, 0.0);
+    }
+
+  }
 }

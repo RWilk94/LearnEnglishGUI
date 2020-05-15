@@ -17,7 +17,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="700" prefWidth="500" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rwilk.learnenglish.controller.word.WordFormController">
+<VBox prefHeight="700" prefWidth="500" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+  AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="rwilk.learnenglish.controller.word.WordFormController">
 
   <SplitPane dividerPositions="0.5" prefHeight="700" prefWidth="500" VBox.vgrow="ALWAYS">
     <VBox>
@@ -25,47 +27,58 @@
       <HBox BorderPane.alignment="TOP_CENTER">
         <TextField fx:id="textFieldExtractWord" promptText="Paste word here..." BorderPane.alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
-        <Button fx:id="buttonExtract" mnemonicParsing="false" onMouseClicked="#buttonExtractOnMouseClicked" text="Extract" BorderPane.alignment="TOP_RIGHT">
+        <Button fx:id="buttonExtract" mnemonicParsing="false" onMouseClicked="#buttonExtractOnMouseClicked" text="Extract"
+          BorderPane.alignment="TOP_RIGHT">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
-        <Button fx:id="buttonMemrise" mnemonicParsing="false" onMouseClicked="#buttonMemriseOnMouseClicked" text="Memrise" BorderPane.alignment="TOP_RIGHT">
+        <Button fx:id="buttonMemrise" mnemonicParsing="false" onMouseClicked="#buttonMemriseOnMouseClicked" text="Memrise"
+          BorderPane.alignment="TOP_RIGHT">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
-        <Button fx:id="buttonMemriseCourse" mnemonicParsing="false" onMouseClicked="#buttonMemriseCourseOnMouseClicked" text="Course" BorderPane.alignment="TOP_RIGHT">
+        <Button fx:id="buttonMemriseCourse" mnemonicParsing="false" onMouseClicked="#buttonMemriseCourseOnMouseClicked" text="Course"
+          BorderPane.alignment="TOP_RIGHT">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+          </HBox.margin>
+        </Button>
+        <Button fx:id="buttonETutorCourse" mnemonicParsing="false" onMouseClicked="#buttonETutorCourseOnMouseClicked" text="ETutor"
+          BorderPane.alignment="TOP_RIGHT">
+          <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
       </HBox>
 
-      <TabPane fx:id="tabPaneTextArea" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TabPane fx:id="tabPaneTextArea" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Tab text="TextArea">
           <HBox>
             <TextArea fx:id="textAreaEn" HBox.hgrow="ALWAYS">
               <HBox.margin>
-                <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
               </HBox.margin>
             </TextArea>
 
             <TextArea fx:id="textAreaPl" HBox.hgrow="ALWAYS">
               <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
               </HBox.margin>
             </TextArea>
           </HBox>
         </Tab>
         <Tab text="ListView">
           <HBox BorderPane.alignment="TOP_CENTER">
-            <ListView fx:id="listViewWords" onMouseClicked="#listViewWordsOnMouseClicked" prefHeight="300.0" prefWidth="232.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <ListView fx:id="listViewWords" onMouseClicked="#listViewWordsOnMouseClicked" prefHeight="300.0" prefWidth="232.0"
+              HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
               <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
               </HBox.margin>
             </ListView>
           </HBox>
@@ -75,22 +88,22 @@
       <HBox>
         <Label minWidth="100" text="Id:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <TextField fx:id="textFieldId" editable="false" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </TextField>
         <Button onAction="#buttonRemoveItemOnAction" text="Remove item Ctrl+R" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button mnemonicParsing="false" onAction="#buttonAllToLowerEnOnAction" text="Lower all">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
       </HBox>
@@ -98,17 +111,17 @@
       <HBox>
         <Label minWidth="100" style="-fx-font-weight: bold;" text="EN Word:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <TextField fx:id="textFieldEnWord" style="-fx-font-weight: bold;" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </TextField>
         <Button mnemonicParsing="false" onAction="#buttonToLowerEnOnAction" text="Lower Ctrl+L">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
       </HBox>
@@ -116,17 +129,17 @@
       <HBox>
         <Label minWidth="100" text="PL Word:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <TextField fx:id="textFieldPlWord" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </TextField>
         <Button fx:id="buttonLowerPL" mnemonicParsing="false" onAction="#buttonToLowerPlOnAction" text="Lower Ctrl+L">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
       </HBox>
@@ -134,58 +147,58 @@
       <HBox>
         <Label minWidth="100" text="Part of Speech">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <ComboBox fx:id="comboBoxPartOfSpeech" minWidth="100" prefWidth="150.0">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
 
         <Label text="Level">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <ComboBox fx:id="comboBoxLevel" minWidth="100" prefWidth="150.0">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
 
         <Button mnemonicParsing="false" onAction="#buttonReplaceOnAction" text="Replace">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
 
       </HBox>
 
       <HBox HBox.hgrow="ALWAYS">
-        <Button text="1" HBox.hgrow="ALWAYS" maxWidth="Infinity" >
+        <Button text="1" HBox.hgrow="ALWAYS" maxWidth="Infinity">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button text="2" HBox.hgrow="ALWAYS" maxWidth="Infinity" onMouseClicked="#button2OnMouseClicked">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button text="3" HBox.hgrow="ALWAYS" maxWidth="Infinity" onMouseClicked="#button3OnMouseClicked">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button text="4" HBox.hgrow="ALWAYS" maxWidth="Infinity" onMouseClicked="#button4OnMouseClicked">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button text="5" HBox.hgrow="ALWAYS" maxWidth="Infinity" onMouseClicked="#button5OnMouseClicked">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
       </HBox>
@@ -193,12 +206,12 @@
       <HBox>
         <Label minWidth="100" text="Part of Speech:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <TextField fx:id="textFieldPartOfSpeech" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </TextField>
       </HBox>
@@ -206,12 +219,12 @@
       <HBox>
         <Label minWidth="100" text="EN Sentence:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <TextField fx:id="textFieldEnSentence" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </TextField>
       </HBox>
@@ -219,12 +232,12 @@
       <HBox>
         <Label minWidth="100" text="PL Sentence:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <TextField fx:id="textFieldPlSentence" HBox.hgrow="ALWAYS">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
           </HBox.margin>
         </TextField>
       </HBox>
@@ -232,23 +245,23 @@
       <HBox>
         <Label minWidth="100" text="Course:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <ComboBox fx:id="comboBoxCourse" minWidth="100" onAction="#comboBoxCourseOnAction" prefWidth="250.0">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
 
         <Label text="Lesson:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <ComboBox fx:id="comboBoxLesson" minWidth="100" prefWidth="250.0">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
       </HBox>
@@ -256,23 +269,23 @@
       <HBox>
         <Label minWidth="100" text="Course 2:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <ComboBox fx:id="comboBoxCourse2" minWidth="100" onAction="#comboBoxCourseOnAction2" prefWidth="250.0">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
 
         <Label text="Lesson 2:">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="5.0" left="10.0" right="10.0" top="10.0"/>
           </HBox.margin>
         </Label>
         <ComboBox fx:id="comboBoxLesson2" minWidth="100" prefWidth="250.0">
           <HBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </ComboBox>
       </HBox>
@@ -280,50 +293,50 @@
       <HBox alignment="BOTTOM_RIGHT">
         <CheckBox fx:id="checkBoxFilterTable" mnemonicParsing="false" selected="true" text="Auto filter words table">
           <HBox.margin>
-            <Insets bottom="7.5" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="7.5" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </CheckBox>
         <Button mnemonicParsing="false" onAction="#buttonRefreshOnAction" text="Refresh">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonDeleteAllOnAction" text="Delete All">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button mnemonicParsing="false" onAction="#buttonClearOnAction" text="Clear">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonDeleteOnAction" text="Delete">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonEditOnAction" text="Edit Ctrl+E">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <Button layoutX="331.0" layoutY="10.0" mnemonicParsing="false" onAction="#buttonAddOnAction" text="Add Ctrl+A">
           <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
           </HBox.margin>
         </Button>
         <VBox.margin>
-          <Insets bottom="10.0" />
+          <Insets bottom="10.0"/>
         </VBox.margin>
       </HBox>
 
-      <Separator prefWidth="200.0" HBox.hgrow="ALWAYS" />
+      <Separator prefWidth="200.0" HBox.hgrow="ALWAYS"/>
 
-      <fx:include source="sentence_form.fxml" />
+      <fx:include source="sentence_form.fxml"/>
     </VBox>
     <VBox>
-      <fx:include source="sentence_scrapper.fxml" />
+      <fx:include source="sentence_scrapper.fxml"/>
     </VBox>
   </SplitPane>
 

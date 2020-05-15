@@ -74,6 +74,7 @@ public class LessonFormController implements Initializable {
           .plName(textFieldPlName.getText().trim())
           .isReady(0)
           .course(courseRepository.findById(((Course) comboBoxCourse.getSelectionModel().getSelectedItem()).getId()).get())
+          .order(1000)
           .build();
       lesson = lessonRepository.save(lesson);
       setLessonForm(lesson);

@@ -3,6 +3,7 @@ package rwilk.learnenglish.controller.scrapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -77,6 +78,7 @@ public class DikiScrapper {
           }
 
           List<String> tempList = children.select("span.hw").eachText();
+          String grammarTag = children.select("a.grammarTag").text();
           for (String translation : tempList) {
             if (tempTranslation.isEmpty()) {
               tempTranslation = translation;
@@ -86,6 +88,9 @@ public class DikiScrapper {
           }
 
           translationsList.add(tempTranslation);
+          if (StringUtils.isNotEmpty(grammarTag)) {
+            translationsList.add(grammarTag);
+          }
           Elements exampleSentence = children.select("div.exampleSentence");
           for (Element elementExampleSentence : exampleSentence) {
             exampleSentenceList.add(elementExampleSentence.text());

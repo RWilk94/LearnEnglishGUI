@@ -24,6 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -32,15 +33,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.SwipeEvent;
+import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import rwilk.learnenglish.controller.audio.AudioController;
 import rwilk.learnenglish.controller.scrapper.SentenceScrapperController;
 import rwilk.learnenglish.controller.sentence.SentenceFormController;
 import rwilk.learnenglish.model.entity.Course;
 import rwilk.learnenglish.model.entity.Lesson;
+import rwilk.learnenglish.model.entity.Sentence;
 import rwilk.learnenglish.model.entity.Word;
 import rwilk.learnenglish.repository.CourseRepository;
 import rwilk.learnenglish.repository.LessonRepository;
+import rwilk.learnenglish.repository.SentenceRepository;
 import rwilk.learnenglish.repository.WordRepository;
 import rwilk.learnenglish.util.AlertDialog;
 
@@ -78,6 +83,11 @@ public class WordsTableController implements Initializable {
   public CheckBox checkBoxAnd;
   public TableColumn columnOrder;
   public TextField textFieldOrder;
+  @Getter
+  public HBox HBoxGroupViewPane;
+  @Getter
+  public SplitPane splitPaneHorizontal;
+  public TextField textFieldOriginalId;
   @Autowired
   private WordRepository wordRepository;
   @Autowired
@@ -90,6 +100,10 @@ public class WordsTableController implements Initializable {
   private CourseRepository courseRepository;
   @Autowired
   private LessonRepository lessonRepository;
+  @Autowired
+  private AudioController audioController;
+  @Autowired
+  private SentenceRepository sentenceRepository;
   @Getter
   private List<Word> words;
   private List<Word> words2;
@@ -185,6 +199,11 @@ public class WordsTableController implements Initializable {
 
   public void buttonClearFilterOnAction(ActionEvent event) {
     words = wordRepository.findAll();
+    this.words = words.stream()
+        .filter(word -> word.getLesson().getCourse().getEnName().contains("ETUTOR")
+            || word.getLesson().getCourse().getEnName().contains("POZIOM")
+            || word.getLesson().getCourse().getEnName().contains("RELEASE"))
+        .collect(Collectors.toList());
     tableWords.setItems(FXCollections.observableArrayList(words));
     textFieldSearch.clear();
     // comboBoxFilterCourse.getSelectionModel().select(null);
@@ -237,6 +256,11 @@ public class WordsTableController implements Initializable {
     if (this.words == null) {
       this.words = wordRepository.findAll();
     }
+    this.words = words.stream()
+        .filter(word -> word.getLesson().getCourse().getEnName().contains("ETUTOR")
+            || word.getLesson().getCourse().getEnName().contains("POZIOM")
+            || word.getLesson().getCourse().getEnName().contains("RELEASE"))
+        .collect(Collectors.toList());
     this.words.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getNextRepeat).thenComparing(Word::getId));
     //    this.words.stream().filter(word -> word.getLesson().getEnName().contains("RELEASE")).forEach(word -> word.setNextRepeat(word.getNextRepeat() + word.getNextRepeat()));
     //}
@@ -251,12 +275,13 @@ public class WordsTableController implements Initializable {
     tableWords.setItems(FXCollections.observableArrayList(words));
     //    comboBoxFilterCourseOnAction(null);
     //    comboBoxFilterLessonOnAction(null);
+
     filterTable(textFieldSearch.getText());
 
     this.words2 = new ArrayList<>(this.words);
-    this.words2.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
+    this.words2.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getNextRepeat).thenComparing(Word::getId));
     this.tableWords2.setItems(FXCollections.observableArrayList(words2));
-    this.filterTable2(this.textFieldSearch2.getText());
+     this.filterTable2(this.textFieldSearch2.getText());
     this.filterTableByLesson2(this.textFieldSearchLesson2.getText());
     this.filterTableByCourse2(this.textFieldSearchCourse2.getText());
   }
@@ -281,8 +306,8 @@ public class WordsTableController implements Initializable {
     } else {
       selectedWord = (Word) tableWords2.getSelectionModel().getSelectedItem();
     }
-    log.info(selectedWord.toString());
     if (selectedWord != null) {
+      audioController.setSearchField(selectedWord.getEnWord());
       if (!wordFormController.textFieldEnWord.getText().isEmpty() && !wordFormController.textFieldEnWord.getText()
           .equalsIgnoreCase(selectedWord.getEnWord()) && sentenceScrapperController.getReplaceDialog()) {
         boolean result = AlertDialog.showConfirmationDialog("Replace", "Do you want to replace current EN Word?");
@@ -300,6 +325,11 @@ public class WordsTableController implements Initializable {
           sentenceScrapperController.setWordToTranslate(selectedWord.getEnWord());
         }
       }
+      if (selectedWord.getLesson().getCourse().getEnName().contains("POZIOM")) {
+        textFieldOriginalId.setText(selectedWord.getId().toString());
+      }
+    } else {
+      log.error("selectedWord = null");
     }
   }
 
@@ -394,8 +424,12 @@ public class WordsTableController implements Initializable {
         .contains("RELEASE")) {
       wordTableRow.setStyle("-fx-background-color: lightgreen");
     } else if (item != null && item.getLesson() != null && item.getLesson().getCourse() != null && item.getLesson().getCourse().toString()
-        .contains("KURS VERSION")) {
-      wordTableRow.setStyle("-fx-background-color: #55ba45");
+        .contains("POZIOM")) {
+//      if (audioController.getAddedSounds() != null && !audioController.getAddedSounds().isEmpty() && audioController.getAddedSounds().contains(item.getId() + ".flac")) {
+//        wordTableRow.setStyle("-fx-background-color: #117009");
+//      } else {
+        wordTableRow.setStyle("-fx-background-color: #55ba45");
+//      }
     } else if (item != null && item.getSentences() != null && !item.getSentences().isEmpty()) {
       wordTableRow.setStyle("-fx-background-color: lightblue");
     } else {
@@ -408,15 +442,17 @@ public class WordsTableController implements Initializable {
       if (!checkBoxAnd.isSelected()) {
         tableWords.setItems(
             FXCollections.observableArrayList(
-                words.stream().filter(word -> word.getEnWord().toLowerCase().equals(textFieldSearch.getText().toLowerCase())
-                    || word.getPlWord().toLowerCase().equals(textFieldSearchPl.getText().toLowerCase()))
+                words.stream().filter(word ->
+                    (word.getEnWord().toLowerCase().equals(textFieldSearch.getText().toLowerCase()) || word.getEnWord().toLowerCase().equals("to " + textFieldSearch.getText().toLowerCase()))
+                        || word.getPlWord().toLowerCase().equals(textFieldSearchPl.getText().toLowerCase()))
                     .collect(Collectors.toList())
             )
         );
       } else {
         tableWords.setItems(
             FXCollections.observableArrayList(
-                words.stream().filter(word -> word.getEnWord().toLowerCase().equals(textFieldSearch.getText().toLowerCase())
+                words.stream().filter(word ->
+                    (word.getEnWord().toLowerCase().equals(textFieldSearch.getText().toLowerCase()) || word.getEnWord().toLowerCase().equals("to " + textFieldSearch.getText().toLowerCase()))
                     && word.getPlWord().toLowerCase().equals(textFieldSearchPl.getText().toLowerCase()))
                     .collect(Collectors.toList()))
         );
@@ -488,7 +524,7 @@ public class WordsTableController implements Initializable {
   private void filterTableByLesson(String value) {
     List<Word> wordList = words.stream().filter(word -> word.getLesson().getEnName().toLowerCase().contains(value.toLowerCase()))
         .collect(Collectors.toList());
-//    wordList.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getId));
+    wordList.sort(Comparator.comparing(Word::getOrder).thenComparing(Word::getNextRepeat).thenComparing(Word::getId));
     tableWords.setItems(
         FXCollections.observableArrayList(wordList)
     );
@@ -547,4 +583,56 @@ public class WordsTableController implements Initializable {
     columnPartOfSpeech2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.075));
     columnLesson2.prefWidthProperty().bind(tableWords2.widthProperty().multiply(0.85));
   }
+
+  public void copySentencesOnAction(ActionEvent event) {
+    String id = textFieldOriginalId.getText();
+    if (StringUtils.isNotEmpty(id) && StringUtils.isNotEmpty(wordFormController.textFieldId.getText())) {
+      Word word = wordRepository.findById(Long.valueOf(id)).get();
+      Word word2 = wordRepository.findById(Long.valueOf(wordFormController.textFieldId.getText())).get();
+
+      for (Sentence sentence : word2.getSentences()) {
+        sentence.setWord(word);
+        sentenceRepository.save(sentence);
+      }
+      word = wordRepository.findById(Long.valueOf(id)).get();
+      words.set(findWordById(word.getId()), word);
+      word2 = wordRepository.findById(Long.valueOf(wordFormController.textFieldId.getText())).get();
+      words.set(findWordById(word2.getId()), word2);
+      fillInTableView();
+    }
+  }
+
+  public void deleteWordOnAction(ActionEvent event) {
+    if (StringUtils.isNotEmpty(wordFormController.textFieldId.getText())) {
+      Word word2 = wordRepository.findById(Long.valueOf(wordFormController.textFieldId.getText())).get();
+
+      for (Sentence sentence : word2.getSentences()) {
+        sentenceRepository.delete(sentence);
+      }
+      word2 = wordRepository.findById(Long.valueOf(wordFormController.textFieldId.getText())).get();
+      wordRepository.delete(word2);
+      words.remove(findWordById(word2.getId()));
+      fillInTableView();
+    }
+  }
+
+  public void buttonDeleteAllOnAction(ActionEvent event) {
+    List<Word> words = tableWords.getItems();
+    for (Word word : words) {
+      if (!word.getLesson().getCourse().getEnName().contains("RELEASE") && !word.getLesson().getCourse().getEnName().contains("POZIOM")) {
+
+        for (Sentence sentence : word.getSentences()) {
+          sentenceRepository.delete(sentence);
+        }
+        word = wordRepository.findById(word.getId()).get();
+        log.info("Delete word: " + word.toString());
+        wordRepository.delete(word);
+
+        int index = findWordById(word.getId());
+        this.words.remove(index);
+      }
+    }
+    fillInTableView();
+  }
+
 }

@@ -1,5 +1,6 @@
 package rwilk.learnenglish.controller.word;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
+import rwilk.learnenglish.controller.audio.AudioDiki;
+import rwilk.learnenglish.controller.scrapper.EtutorScrapper;
+import rwilk.learnenglish.controller.scrapper.EtutorScrapper2;
+import rwilk.learnenglish.controller.scrapper.ForvoScrapper;
 import rwilk.learnenglish.controller.scrapper.MemriseCourseScrapper;
 import rwilk.learnenglish.controller.scrapper.MemriseScrapper;
 import rwilk.learnenglish.controller.scrapper.SentenceScrapperController;
@@ -86,6 +91,12 @@ public class WordFormController implements Initializable {
   private MemriseScrapper memriseScrapper;
   @Autowired
   private MemriseCourseScrapper memriseCourseScrapper;
+  @Autowired
+  private EtutorScrapper etutorScrapper;
+  @Autowired
+  private EtutorScrapper2 etutorScrapper2;
+  @Autowired
+  private ForvoScrapper forvoScrapper;
   private List<String> partOfSpeechList;
   private Course selectedCourse;
   private Lesson selectedLesson;
@@ -144,11 +155,10 @@ public class WordFormController implements Initializable {
     keyCombination = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
     runnable = () -> {
       System.out.println("Ctrl + D");
-//      buttonDeleteAllOnAction(null);
-       buttonDeleteOnAction(null);
+      //      buttonDeleteAllOnAction(null);
+      buttonDeleteOnAction(null);
     };
     buttonMemrise.getScene().getAccelerators().put(keyCombination, runnable);
-
 
     buttonMemrise.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
       @Override
@@ -281,27 +291,31 @@ public class WordFormController implements Initializable {
         //(textFieldEnSentence.getText().isEmpty() && textFieldPlSentence.getText().isEmpty()))
         && lesson != null) {
       // && !comboBoxLesson.getSelectionModel().isEmpty()) {
-      Optional<Word> wordOptional = wordRepository.findById(Long.valueOf(textFieldId.getText()));
-      wordOptional.ifPresent(word -> {
-        word.setEnWord(textFieldEnWord.getText().trim());
-        word.setPlWord(textFieldPlWord.getText().trim());
-        // word.setPartOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString());
-        word.setPartOfSpeech(partOfSpeech.trim());
-        // word.setLevel((Integer) comboBoxLevel.getSelectionModel().getSelectedItem());
-        //word.setEnSentence(textFieldEnSentence.getText().trim());
-        //word.setPlSentence(textFieldPlSentence.getText().trim());
-        word.setNextRepeat(System.currentTimeMillis());
-        word.setLesson(lesson);
-        word.setIsReady(0);
-        word = wordRepository.save(word);
-
-        int index = wordsTableController.findWordById(word.getId());
-        wordsTableController.getWords().set(index, word);
-
-        setWordForm(word);
-        refreshTableView();
-      });
+      updateWord(lesson, partOfSpeech);
     }
+  }
+
+  public void updateWord(Lesson lesson, String partOfSpeech) {
+    Optional<Word> wordOptional = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    wordOptional.ifPresent(word -> {
+      word.setEnWord(textFieldEnWord.getText().trim());
+      word.setPlWord(textFieldPlWord.getText().trim());
+      // word.setPartOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString());
+      word.setPartOfSpeech(partOfSpeech.trim());
+      // word.setLevel((Integer) comboBoxLevel.getSelectionModel().getSelectedItem());
+      //word.setEnSentence(textFieldEnSentence.getText().trim());
+      //word.setPlSentence(textFieldPlSentence.getText().trim());
+      word.setNextRepeat(System.currentTimeMillis());
+      word.setLesson(lesson);
+      word.setIsReady(0);
+      word = wordRepository.save(word);
+
+      int index = wordsTableController.findWordById(word.getId());
+      wordsTableController.getWords().set(index, word);
+
+      setWordForm(word);
+      refreshTableView();
+    });
   }
 
   public void buttonAddOnAction(ActionEvent event) {
@@ -334,6 +348,7 @@ public class WordFormController implements Initializable {
           .nextRepeat(System.currentTimeMillis())
           .lesson(lesson)
           .isReady(0)
+          .order(1000)
           .build();
       word = wordRepository.save(word);
 
@@ -378,7 +393,8 @@ public class WordFormController implements Initializable {
       textFieldEnWord.setText(selectedItem.substring(0, selectedItem.indexOf("(")));
       textFieldPlWord.setText(textFieldPlWord.getText().replace(" (BrE)", ""));
       textFieldPlWord.setText(textFieldPlWord.getText().replace(" (AmE)", ""));
-      textFieldPlWord.setText(textFieldPlWord.getText().trim() + " " + selectedItem.substring(selectedItem.indexOf("("), selectedItem.indexOf(")") + 1));
+      textFieldPlWord.setText(
+          textFieldPlWord.getText().trim() + " " + selectedItem.substring(selectedItem.indexOf("("), selectedItem.indexOf(")") + 1));
     } else {
       textFieldPlWord.setText(selectedItem);
     }
@@ -508,7 +524,7 @@ public class WordFormController implements Initializable {
   public void buttonDeleteAllOnAction(ActionEvent event) {
     List<Word> words = wordsTableController.tableWords.getItems();
     for (Word word : words) {
-      if (!word.getLesson().getEnName().contains("RELEASE")) {
+      if (!word.getLesson().getEnName().contains("RELEASE") && !word.getLesson().getEnName().contains("POZIOM")) {
         log.info("Delete word: " + word.toString());
         wordRepository.delete(word);
         int index = wordsTableController.findWordById(word.getId());
@@ -569,6 +585,95 @@ public class WordFormController implements Initializable {
       word.setLevel(5);
       wordRepository.save(word);
     });
+
+  }
+
+  public void refreshTableView() {
+    wordsTableController.fillInTableView();
+  }
+
+  public void updateSpecificWord(Word word) {
+    int index = wordsTableController.findWordById(word.getId());
+    wordsTableController.getWords().set(index, word);
+    setWordForm(word);
+    refreshTableView();
+
+    //    public void updateWord(Lesson lesson, String partOfSpeech) {
+    //      Optional<Word> wordOptional = wordRepository.findById(Long.valueOf(textFieldId.getText()));
+    //      wordOptional.ifPresent(word -> {
+    //        word.setEnWord(textFieldEnWord.getText().trim());
+    //        word.setPlWord(textFieldPlWord.getText().trim());
+    //        // word.setPartOfSpeech(comboBoxPartOfSpeech.getSelectionModel().getSelectedItem().toString());
+    //        word.setPartOfSpeech(partOfSpeech.trim());
+    //        // word.setLevel((Integer) comboBoxLevel.getSelectionModel().getSelectedItem());
+    //        //word.setEnSentence(textFieldEnSentence.getText().trim());
+    //        //word.setPlSentence(textFieldPlSentence.getText().trim());
+    //        word.setNextRepeat(System.currentTimeMillis());
+    //        word.setLesson(lesson);
+    //        word.setIsReady(0);
+    //        word = wordRepository.save(word);
+    //
+    //        int index = wordsTableController.findWordById(word.getId());
+    //        wordsTableController.getWords().set(index, word);
+    //
+    //        setWordForm(word);
+    //        refreshTableView();
+    //      });
+    //    }
+
+  }
+
+  public void buttonETutorCourseOnMouseClicked(MouseEvent mouseEvent) throws IOException {
+    for (int i = 41; i <= 79; i++) {
+
+      Optional<Course> course = courseRepository.findById(new Long(i));
+      if (course.isPresent()) {
+        List<Word> words = wordRepository.findAllByLesson_Course(course.get());
+        for (Word word : words) {
+
+          try {
+            log.info(course.get().getEnName() + " " + word.getEnWord());
+
+            String title = word.getEnWord();
+            title = title.replaceAll("[^a-zA-Z0-9 ]", "");
+            title = title.trim().replaceAll(" ", "_");
+
+            if (word.getPartOfSpeech().equalsIgnoreCase("czasownik")) {
+              title = title.substring(3);
+            }
+
+            AudioDiki.downloadAudio(title.toLowerCase());
+          } catch (Exception e) {
+            log.error(word.getEnWord());
+          }
+
+        }
+      }
+    }
+
+    //    //    etutorScrapper.webScrap();
+    //    Course course = courseRepository.findById(35L).get();
+    //    List<Word> words = wordRepository.findAllByLesson_Course(course);
+    //    words = words.stream().filter(word -> word.getIsReady() == 0).collect(Collectors.toList());
+    //
+    //    // List<Word> sublist = words.subList(0, 10);
+    //
+    //    for (Word word : words) {
+    //      forvoScrapper.webScrap(word);
+    //      word.setIsReady(1);
+    //      wordRepository.save(word);
+    //    }
+    //
+    //    System.out.println();
+    //    System.out.println();
+    //    System.out.println();
+    //    for (String error : forvoScrapper.getErrors()) {
+    //      log.error(error);
+    //    }
+
+    //    forvoScrapper.webScrap(wordRepository.findById(61719L).get());
+
+    // TODO change it
 
   }
 
@@ -639,9 +744,5 @@ public class WordFormController implements Initializable {
       //      List<String> lessonNames = lessons.stream().map(Lesson::getPlName).collect(Collectors.toList());
       comboBoxLesson2.setItems(FXCollections.observableArrayList(lessons));
     });
-  }
-
-  private void refreshTableView() {
-    wordsTableController.fillInTableView();
   }
 }

@@ -35,9 +35,9 @@ public class Word implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   Long id;
-  @Column(name = "polish_word")
+  @Column(name = "polish_word", length = 2000)
   String plWord;
-  @Column(name = "english_word")
+  @Column(name = "english_word", length = 2000)
   String enWord;
   @Column(name = "part_of_speech")
   String partOfSpeech;
@@ -79,12 +79,6 @@ public class Word implements Serializable {
 
   @Override
   public String toString() {
-    return "Word{" +
-        "id=" + id +
-        ", plWord='" + plWord + '\'' +
-        ", enWord='" + enWord + '\'' +
-        ", partOfSpeech='" + partOfSpeech + '\'' +
-        ", lesson=" + lesson +
-        '}';
+    return id + ". " + enWord + " (" + plWord + ")";
   }
 }

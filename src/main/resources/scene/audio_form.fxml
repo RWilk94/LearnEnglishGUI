@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="rwilk.learnenglish.controller.audio.AudioController"
+  prefHeight="800.0" prefWidth="600.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+
+  <HBox>
+    <TextField fx:id="textFieldSound" HBox.hgrow="ALWAYS">
+      <HBox.margin>
+        <Insets bottom="2.5" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </TextField>
+
+    <Button text="Set" onAction="#buttonSetSoundOnAction">
+      <HBox.margin>
+        <Insets bottom="2.5" left="5.0" right="5.0" top="5.0"/>
+      </HBox.margin>
+    </Button>
+  </HBox>
+
+  <TextField fx:id="textFieldSearch" HBox.hgrow="ALWAYS">
+    <VBox.margin>
+      <Insets bottom="2.5" left="5.0" right="5.0" top="5.0"/>
+    </VBox.margin>
+  </TextField>
+
+  <ListView fx:id="listViewSounds" prefHeight="300.0" prefWidth="232.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+    onMouseClicked="#listViewSoundsOnMouseClicked">
+    <VBox.margin>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="2.5"/>
+    </VBox.margin>
+  </ListView>
+
+</VBox>

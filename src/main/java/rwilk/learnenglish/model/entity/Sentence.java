@@ -33,9 +33,9 @@ public class Sentence implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   Long id;
-  @Column(name = "polish_sentence")
+  @Column(name = "polish_sentence", length = 2000)
   String plSentence;
-  @Column(name = "english_sentence")
+  @Column(name = "english_sentence", length = 2000)
   String enSentence;
   @Column(name = "is_ready")
   Integer isReady;

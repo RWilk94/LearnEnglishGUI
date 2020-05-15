@@ -36,9 +36,9 @@ public class Lesson implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   Long id;
-  @Column(name = "english_name")
+  @Column(name = "english_name", length = 2000)
   String enName;
-  @Column(name = "polish_name")
+  @Column(name = "polish_name", length = 2000)
   String plName;
   @Column(name = "image")
   String image;
@@ -46,6 +46,8 @@ public class Lesson implements Serializable {
   Integer isCustom;
   @Column(name = "is_ready")
   Integer isReady;
+  @Column(name = "current_order", columnDefinition = "integer default 1000")
+  Integer order;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "id")

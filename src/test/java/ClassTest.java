@@ -9,7 +9,7 @@ public class ClassTest {
 
   @Test
   void test() {
-    Optional<String> s = Optional.of("test");
+    Optional<String> s = Optional.of("test.html");
     assertEquals(Optional.of("TEST"), s.map(String::toUpperCase));
   }
 
@@ -35,7 +35,7 @@ public class ClassTest {
     String s = test.flatMap(this::te).orElse("ELSE");
     assertEquals("TEST", s);
 
-//    test.map(String::toUpperCase);
+//    test.html.map(String::toUpperCase);
   }
 
   private Optional<String> te(String s) {

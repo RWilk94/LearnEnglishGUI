@@ -86,6 +86,7 @@ public class CourseFormController implements Initializable {
           .plName(textFieldPlName.getText().trim())
           .isReady(0)
           .level(Integer.valueOf(comboBoxLevel.getSelectionModel().getSelectedItem().toString()))
+          .order(1000)
           .build();
       course = courseRepository.save(course);
       setCourseForm(course);

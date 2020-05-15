@@ -34,9 +34,9 @@ public class Course implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, unique = true)
   Long id;
-  @Column(name = "english_name")
+  @Column(name = "english_name", length = 2000)
   String enName;
-  @Column(name = "polish_name")
+  @Column(name = "polish_name", length = 2000)
   String plName;
   @Column(name = "level")
   Integer level;
@@ -46,6 +46,8 @@ public class Course implements Serializable {
   Integer isCustom;
   @Column(name = "is_ready")
   Integer isReady;
+  @Column(name = "current_order", columnDefinition = "integer default 1000")
+  Integer order;
 
   @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})//, cascade = {CascadeType.PERSIST/*, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH*/})
   private List<Lesson> lessons = new ArrayList<>();
